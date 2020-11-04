@@ -49,7 +49,7 @@
             <span slot="title">首页</span>
           </el-menu-item>
           <el-menu-item index="caseManagement" @click="toPage('caseManagement')">
-            <span slot="title">事项管理</span>
+            <span slot="title">案件管理</span>
           </el-menu-item>
           <!-- <el-submenu index="#0">
             <template slot="title" style="height: 45px; line-height: 45px">
