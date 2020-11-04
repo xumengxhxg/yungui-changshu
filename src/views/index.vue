@@ -64,6 +64,22 @@
               <el-menu-item index="accessLog" @click="toPage('accessLog')">存取日志</el-menu-item>
             </el-menu-item-group>
           </el-submenu> -->
+          <el-submenu index="#0">
+            <template slot="title" style="height: 45px; line-height: 45px">
+              <span>随身物品柜管理</span>
+            </template>
+            <el-menu-item-group>
+              <!-- <el-menu-item index="warehousingManagement" @click="toPage('warehousingManagement')">入库管理</el-menu-item>
+              <el-menu-item index="inStockManagement" @click="toPage('inStockManagement')">在库管理</el-menu-item>
+              <el-menu-item index="inventoryManagement" @click="toPage('inventoryManagement')">盘点管理</el-menu-item>
+              <el-menu-item index="biologicalMaterialQuery" @click="toPage('biologicalMaterialQuery')">生物检材查询</el-menu-item>
+              <el-menu-item index="inspectionCabinet" @click="toPage('inspectionCabinet')">检材柜</el-menu-item>
+              <el-menu-item index="accessLog" @click="toPage('accessLog')">存取日志</el-menu-item> -->
+              <el-menu-item index="effectsWarehousingManagemnet">入库登记</el-menu-item>
+              <el-menu-item index="effectsInStockManagement">随身物品管理</el-menu-item>
+              <el-menu-item index="effectsAccessLog">存取日志</el-menu-item> 
+            </el-menu-item-group>
+          </el-submenu>
           <el-submenu index="#1">
             <template slot="title">
               <span>涉案财物柜管理</span>

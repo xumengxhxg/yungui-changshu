@@ -38,6 +38,10 @@ import propertyCabinetDetail from '@/components/involvedPropertyManagement/cabin
 import searchFileDetail from '@/components/fileManagement/searchDetail'
 import fileCabinetDetail from '@/components/fileManagement/cabinetDetail'
 
+import effectsWarehousingManagemnet from '@/views/effectsWarehousingManagemnet'
+import effectsInStockManagement from '@/views/effectsInStockManagement'
+import effectsAccessLog from '@/views/effectsAccessLog'
+
 import frontDesk from '@/views/frontDesk'
 import unfound from '@/views/404'
 
@@ -65,6 +69,19 @@ const routes = [
         path: 'caseManagement',
         name: 'caseManagement',
         component: caseManagement
+      },
+      {
+        path: 'effectsWarehousingManagemnet', //随身物品-入库登记
+        name: 'effectsWarehousingManagemnet',
+        component: effectsWarehousingManagemnet
+      },{
+        path: 'effectsInStockManagement', //随身物品-在库管理
+        name: 'effectsInStockManagement',
+        component: effectsInStockManagement
+      },{
+        path: 'effectsAccessLog', //随身物品-存取日志
+        name: 'effectsAccessLog',
+        component: effectsAccessLog
       },{
         path: 'warehousingManagement',
         name: 'warehousingManagement',

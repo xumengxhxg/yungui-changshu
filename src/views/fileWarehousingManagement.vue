@@ -287,7 +287,9 @@ export default {
       registerDisabled: true,
       selectDoorDisabled: true,
       sum: 0,
-      cabinetList: [
+      cabinetList: [{doorNo: 'D-1'}, {doorNo: 'D-2'}, {doorNo: 'D-3'}, {doorNo: 'D-4'}, {doorNo: 'D-5'}, {doorNo: 'D-6'}, {doorNo: 'D-7'}, {doorNo: 'D-8'}, 
+      {doorNo: 'C-1'}, {doorNo: 'C-2'}, {doorNo: 'C-3'}, {doorNo: 'C-4'}, {doorNo: 'C-5'}, {doorNo: 'C-6'}, {doorNo: 'C-7'}, {doorNo: 'C-8'}, 
+      {doorNo: 'B-1'}, {doorNo: 'B-2'}, {doorNo: 'B-3'}, {doorNo: 'B-4'}, {doorNo: 'B-5'}, {doorNo: 'B-6'}, {doorNo: 'B-7'}, {doorNo: 'B-8'}, 
       {doorNo: 'A-1'}, {doorNo: 'A-2'}, {doorNo: 'A-3'}, {doorNo: 'A-4'}, {doorNo: 'A-5'}, {doorNo: 'A-6'}]
     }
   },

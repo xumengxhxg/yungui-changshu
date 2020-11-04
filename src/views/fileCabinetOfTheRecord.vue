@@ -12,8 +12,8 @@
         <!-- 设备SNb8b1112234 -->
       </div>
       <div class="mt20">
-        <div class="clearfix" style="margin: 0 auto; width: 30%; margin-top: 40px; border: 1px solid #cecece;padding: 5px">
-          <div class="pull-left" style="width: 50%">
+        <div class="clearfix" style="margin: 0 auto; width: 60%; margin-top: 40px; border: 1px solid #cecece;padding: 5px">
+           <div class="pull-left" style="width: 12.5%">
             <div class="cabinet" v-for="item in cabinetNewList.slice(0, 4)" :key="item.doorNo" @click="toPage(item.doorNo)">
               <div>
                 {{item.doorNo}}
@@ -23,11 +23,71 @@
               </div>
             </div>
           </div>
-          <div class="pull-left" style="width: 50%">
+           <div class="pull-left" style="width: 12.5%">
+            <div class="cabinet" v-for="item in cabinetNewList.slice(4, 8)" :key="item.doorNo" @click="toPage(item.doorNo)">
+              <div>
+                {{item.doorNo}}
+                <div>已用：{{item.usedSpace}} </div>
+                <div>剩余：{{item.surplusSpace}}</div>
+                <div>登记：{{item.inExistence}}</div>
+              </div>
+            </div>
+          </div>
+           <div class="pull-left" style="width: 12.5%">
+            <div class="cabinet" v-for="item in cabinetNewList.slice(8, 12)" :key="item.doorNo" @click="toPage(item.doorNo)">
+              <div>
+                {{item.doorNo}}
+                <div>已用：{{item.usedSpace}} </div>
+                <div>剩余：{{item.surplusSpace}}</div>
+                <div>登记：{{item.inExistence}}</div>
+              </div>
+            </div>
+          </div>
+           <div class="pull-left" style="width: 12.5%">
+            <div class="cabinet" v-for="item in cabinetNewList.slice(12, 16)" :key="item.doorNo" @click="toPage(item.doorNo)">
+              <div>
+                {{item.doorNo}}
+                <div>已用：{{item.usedSpace}} </div>
+                <div>剩余：{{item.surplusSpace}}</div>
+                <div>登记：{{item.inExistence}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="pull-left" style="width: 12.5%">
+            <div class="cabinet" v-for="item in cabinetNewList.slice(16, 20)" :key="item.doorNo" @click="toPage(item.doorNo)">
+              <div>
+                {{item.doorNo}}
+                <div>已用：{{item.usedSpace}} </div>
+                <div>剩余：{{item.surplusSpace}}</div>
+                <div>登记：{{item.inExistence}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="pull-left" style="width: 12.5%">
+            <div class="cabinet" v-for="item in cabinetNewList.slice(20, 24)" :key="item.doorNo" @click="toPage(item.doorNo)">
+              <div>
+                {{item.doorNo}}
+                <div>已用：{{item.usedSpace}} </div>
+                <div>剩余：{{item.surplusSpace}}</div>
+                <div>登记：{{item.inExistence}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="pull-left" style="width: 12.5%">
+            <div class="cabinet" v-for="item in cabinetNewList.slice(24, 28)" :key="item.doorNo" @click="toPage(item.doorNo)">
+              <div>
+                {{item.doorNo}}
+                <div>已用：{{item.usedSpace}} </div>
+                <div>剩余：{{item.surplusSpace}}</div>
+                <div>登记：{{item.inExistence}}</div>
+              </div>
+            </div>
+          </div>
+          <div class="pull-left" style="width: 12.5%">
             <div class="cabinet-2">
               <div></div>
             </div>
-            <div class="cabinet" v-for="item in cabinetNewList.slice(4, 6)" :key="item.doorNo" @click="toPage(item.doorNo)">
+            <div class="cabinet" v-for="item in cabinetNewList.slice(28, 30)" :key="item.doorNo" @click="toPage(item.doorNo)">
                 <div>
                   {{item.doorNo}}
                   <div>已用：{{item.usedSpace}} </div>
@@ -48,7 +108,10 @@ export default {
   data () {
     return {
       cabinetNewList: [],
-      cabinetList: [{doorNo: 'A-1'}, {doorNo: 'A-2'}, {doorNo: 'A-3'}, {doorNo: 'A-4'}, {doorNo: 'A-5'}, {doorNo: 'A-6'}]
+      cabinetList: [{doorNo: 'D-1'}, {doorNo: 'D-2'}, {doorNo: 'D-3'}, {doorNo: 'D-4'}, {doorNo: 'D-5'}, {doorNo: 'D-6'}, {doorNo: 'D-7'}, {doorNo: 'D-8'}, 
+      {doorNo: 'C-1'}, {doorNo: 'C-2'}, {doorNo: 'C-3'}, {doorNo: 'C-4'}, {doorNo: 'C-5'}, {doorNo: 'C-6'}, {doorNo: 'C-7'}, {doorNo: 'C-8'}, 
+      {doorNo: 'B-1'}, {doorNo: 'B-2'}, {doorNo: 'B-3'}, {doorNo: 'B-4'}, {doorNo: 'B-5'}, {doorNo: 'B-6'}, {doorNo: 'B-7'}, {doorNo: 'B-8'}, 
+      {doorNo: 'A-1'}, {doorNo: 'A-2'}, {doorNo: 'A-3'}, {doorNo: 'A-4'}, {doorNo: 'A-5'}, {doorNo: 'A-6'}]
     }
   },
   created() {

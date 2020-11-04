@@ -1,0 +1,424 @@
+<!-- 入库登记 -->
+<template>
+  <div>
+    <div class="text-left ph20 pv10">
+      生物检材柜管理/入库管理
+    </div>
+    <div class="bg-white top-container p20" >
+      <div style="border:1px solid rgb(64, 158, 255); width: 100%">
+        <div class="triangle-topleft" style="position: absolute">
+          <span class="triangle-text">登记</span>
+        </div>
+        <div class="right-container pv20" style="wisth: 80%; margin: 0 auto">
+          <el-form :inline="true"  class="demo-form-inline">
+            <el-form-item label="嫌疑人：">
+              <el-input v-model="suspect" size="small" placeholder="审批人"></el-input>
+            </el-form-item>
+            <el-form-item label="身份证：">
+              <el-input v-model="idCard" size="small" placeholder="身份证"></el-input>
+            </el-form-item>
+          </el-form>
+          <i class="el-icon-circle-plus" style="color: #409EFF" @click="addEffects(0)"></i>
+          <el-table
+            size='small'
+            :data="tableData"
+            style="width: 100%;">
+            <el-table-column
+              prop="name"
+              label="物品名称">
+            </el-table-column>
+            <el-table-column
+              prop="num"
+              label="物品数量"
+              width="180">
+            </el-table-column>
+            <el-table-column
+              label="操作"
+              width="180">
+              <template slot-scope="scope">
+                <el-button type="text" @click="editEffects(scope.row, scope.$index)">编辑</el-button>
+                <el-button type="text" @click="deleteEffectsInRegister">删除</el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <div class="mt20">
+            <el-input placeholder="点击选择柜门" v-model="selectDoorNo" style="width: 500px;" @focus="selectCabinet">
+              <template slot="prepend">分配柜门</template>
+            </el-input>
+          </div>
+          <div class="mt40" style="text-align: center">
+            <el-button type='primary' style="width: 200px"  @click="register">登记</el-button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white p20">
+      <!-- 待存列表 -->
+      <div style="text-align: center">待存列表</div>
+      <el-table
+        :data="storelist"
+        style="width: 80%; margin: 0 auto">
+        <el-table-column
+          prop="name"
+          label="嫌疑人"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          prop="idCard"
+          label="身份证"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          label="随身物品">
+          <template>
+            <el-button type="text" @click="effectsManagementFn">物品列表管理</el-button>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          width='200'>
+          <template slot-scope="scope">
+            <el-button type="text" @click="addEffects(1)">新增随身物品</el-button>
+            <el-button type="text" @click="editSuspect(scope.row)">编辑</el-button>
+            <el-button type="text" @click="deleteSuspect">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <!-- 物品新增编辑 -->
+     <el-dialog
+      :title="title"
+      :visible.sync="dialogVisible"
+      width="30%">
+      <el-form :model="effectsInfo" label-width="80px">
+        <el-form-item label="物品名称：" >
+          <el-input v-model="effectsInfo.name" autocomplete="off" size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="物品数量：" >
+          <el-input-number size="small" v-model="effectsInfo.num" :min="0"></el-input-number>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="save">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!--物品列表管理 -->
+    <el-dialog
+      title="物品列表管理"
+      :visible.sync="listDialogVisible"
+      width="30%">
+      <el-table
+        size='small'
+        :data="effectsList"
+        style="width: 100%;">
+        <el-table-column
+          prop="name"
+          label="物品名称">
+        </el-table-column>
+        <el-table-column
+          prop="num"
+          label="物品数量"
+          width="180">
+        </el-table-column>
+        <el-table-column
+          label="操作"
+          width="120">
+          <template slot-scope="scope">
+            <el-button type="text" @click="deleteEffects">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <span slot="footer" class="dialog-footer">
+        <!-- <el-button @click="cancel">取 消</el-button> -->
+        <el-button type="primary" @click="confirm">确 定</el-button>
+      </span>
+    </el-dialog>
+    <!-- 编辑嫌疑人 -->
+    <el-dialog
+      title="编辑"
+      :visible.sync="suspectDialogVisible"
+      width="30%">
+       <el-form :model="suspectInfo" label-width="100px">
+        <el-form-item label="嫌疑人姓名：" >
+          <el-input v-model="suspectInfo.name" autocomplete="off" size="small"></el-input>
+        </el-form-item>
+        <el-form-item label="嫌疑人身份证：" >
+          <el-input v-model="suspectInfo.idCard" autocomplete="off" size="small"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="cancelEditSuspect">取 消</el-button>
+        <el-button type="primary" @click="saveEditSuspect">确 定</el-button>
+      </span>
+    </el-dialog>
+    <div v-if="selectCabinetDialogVisible">
+      <select-cabinet :dialogVisible='selectCabinetDialogVisible' @update='updateCabinetDialogVisible' @selectCabinet='selectDoor'></select-cabinet>
+    </div>
+  </div>
+</template>
+
+<script>
+import selectCabinet from '@/components/effectsManagement/selectCabinet'
+export default {
+  components: {
+    selectCabinet
+  },
+  data () {
+    return {
+      title: '',
+      suspect: '',
+      idCard: '',
+      tableData: [],
+      storelist: [{name: '77777', idCard: '9999'}],
+      dialogVisible: false,
+      listDialogVisible: false,
+      suspectDialogVisible: false,
+      effectsInfo: {
+        name: '',
+        num: 0
+      },
+      suspectInfo: {
+        name: '',
+        idCard: ''
+      },
+      currentIndex: '',
+      selectCabinetDialogVisible: false,
+      selectDoorNo: '',
+      effectsList: [{name: 'hhh'}],
+      addEffectType: 0
+    }
+  },
+  methods: {
+    addEffects(val) {
+      this.title = '添加随身物品'
+      this.effectsInfo = {name: '', num: 0}
+      this.dialogVisible = true
+      this.addEffectType = val
+    },
+    cancel() {
+      this.dialogVisible = false
+    },
+    save() {
+      if (!this.addEffectType) {
+        if (this.title == '添加随身物品') {
+          this.tableData.push(this.effectsInfo)
+        } else {
+          this.tableData[this.currentIndex] = this.effectsInfo
+        }
+        this.dialogVisible = false
+        this.currentIndex = ''
+      } else {
+        alert(1)
+      }
+    },
+    editEffects(row, index) {
+      this.title = '编辑随身物品'
+      this.dialogVisible = true
+      this.effectsInfo = {name: row.name, num: row.num}
+      this.currentIndex = index
+    },
+    // 删除登记之前的物品
+    deleteEffectsInRegister() {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })       
+      })
+    },
+    updateCabinetDialogVisible(val) {
+      this.selectCabinetDialogVisible = val
+    },
+    // 选择柜号
+    selectDoor(val) {
+      this.selectDoorNo = val
+    },
+    selectCabinet() {
+      this.selectCabinetDialogVisible = true
+    },
+    register() {
+      let obj = {
+        suspect: this.suspect,
+        idCard: this.idCard,
+        table: this.tableData,
+        doorNo: this.selectDoorNo
+      }
+      console.log(obj)
+      this.suspect = ''
+      this.idCard = ''
+      this.tableData = []
+      this.selectDoorNo = ''
+    },
+    effectsManagementFn() {
+      this.listDialogVisible = true
+    },
+    // 删除待办列表嫌疑人
+    deleteSuspect() {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })       
+      })
+    },
+    // 编辑待办列表嫌疑人
+    editSuspect(item) {
+      this.suspectDialogVisible = true
+      this.suspectInfo = {
+        name: item.name,
+        idCard: item.idCard
+      }
+    },
+    // 保存嫌疑人编辑信息
+    saveEditSuspect() {
+      this.suspectDialogVisible = false
+    },
+    // 取消保存嫌疑人编辑信息
+    cancelEditSuspect() {
+      this.suspectDialogVisible = false
+    },
+    // 删除物品列表管理的某个物品
+    deleteEffects() {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })       
+      })
+    },
+    confirm() {
+      this.listDialogVisible = false
+    }
+  }
+}
+
+</script>
+
+<style lang='less' scoped>
+.my-autocomplete {
+  li {
+    line-height: normal;
+    padding: 7px;
+
+    .item1 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .item2 {
+      font-size: 12px;
+      color: #b4b4b4;
+      line-height: 20px;
+    }
+
+    .highlighted .item2 {
+      color: #ddd;
+    }
+  }
+}
+.top-container {
+  display: flex; 
+  flex-direction: row;
+  .right-container {
+    width: 50%;
+    flex: 1;
+    .title {
+      font-size: 20px;
+      font-weight: 500;
+    }
+    .delete-icon {
+      font-size: 20px;
+      position: relative;
+      left: -10px;
+      top: 12px;
+      color: #F56C6C;
+    }
+    .delete-icon-2 {
+      font-size: 20px;
+      position: relative;
+      left: -340px;
+      top: 12px;
+      color: #F56C6C;
+    }
+    table,table tr td {
+      border: 1px solid #ededed;
+    }
+    table tr td:nth-child(2n-1) {
+      width: 130px;
+      height: 40px;
+      line-height: 40px;
+      text-align: right;
+      background: #F5F5F5 100%;
+    }
+    table tr td:nth-child(2n) {
+      width: 200px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+    }
+  }
+}
+.triangle-text {
+  width: 100px;
+  text-align: center;
+  display: inline-block;
+  position: relative;
+  top: -70px;
+  color: #fff;
+  left: -30px;
+  font-size: 16px;
+}
+.data {
+  width: 50%;
+  box-sizing: border-box;
+  padding: 20px 40px;
+  .title-text {
+    font-size: 25px;
+    font-weight: 600;
+  }
+  .icon {
+    font-size: 35px;
+    font-weight: 600;
+    color: #0C8EF6;
+    margin-top: 10px;
+  }
+  .num {
+    height: 100%;
+    line-height: 100%;
+    font-size: 45px;
+    color: red;
+    position: relative;
+    bottom: 0px;
+    left: 50px;
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+}
+</style>
