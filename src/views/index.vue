@@ -51,7 +51,7 @@
           <el-menu-item index="caseManagement" @click="toPage('caseManagement')">
             <span slot="title">事项管理</span>
           </el-menu-item>
-          <el-submenu index="#0">
+          <!-- <el-submenu index="#0">
             <template slot="title" style="height: 45px; line-height: 45px">
               <span>生物检材柜管理</span>
             </template>
@@ -63,7 +63,7 @@
               <el-menu-item index="inspectionCabinet" @click="toPage('inspectionCabinet')">检材柜</el-menu-item>
               <el-menu-item index="accessLog" @click="toPage('accessLog')">存取日志</el-menu-item>
             </el-menu-item-group>
-          </el-submenu>
+          </el-submenu> -->
           <el-submenu index="#1">
             <template slot="title">
               <span>涉案财物柜管理</span>
