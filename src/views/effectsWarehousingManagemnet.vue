@@ -64,7 +64,7 @@
           width="180">
         </el-table-column>
         <el-table-column
-          prop="idCard"
+          prop="eventNo"
           label="身份证"
           width="180">
         </el-table-column>
@@ -159,6 +159,7 @@
 </template>
 
 <script>
+import { checkIn, toBeStoredList, getPersonalItemList } from '@/api/cabinet'
 import selectCabinet from '@/components/effectsManagement/selectCabinet'
 export default {
   components: {
@@ -170,7 +171,7 @@ export default {
       suspect: '',
       idCard: '',
       tableData: [],
-      storelist: [{name: '77777', idCard: '9999'}],
+      storelist: [],
       dialogVisible: false,
       listDialogVisible: false,
       suspectDialogVisible: false,
@@ -186,8 +187,14 @@ export default {
       selectCabinetDialogVisible: false,
       selectDoorNo: '',
       effectsList: [{name: 'hhh'}],
-      addEffectType: 0
+      addEffectType: 0,
+      pageNum: 1,
+      pageSize: 10,
+      total: 0
     }
+  },
+  created() {
+    this.toBeStoredList()
   },
   methods: {
     addEffects(val) {
@@ -247,17 +254,70 @@ export default {
       this.selectCabinetDialogVisible = true
     },
     register() {
-      let obj = {
-        suspect: this.suspect,
-        idCard: this.idCard,
-        table: this.tableData,
-        doorNo: this.selectDoorNo
+      const h = this.$createElement;
+      this.$msgbox({
+        title: '',
+        message: h('p', null, [
+          h('p', null, [
+            h('i', {class: 'el-icon-success', style: 'color: #67C23A; font-size: 18px'}),
+            h('span', {style: 'display: inline-block; margin-left: 10px'}, '确认要登记这条信息吗？')
+          ]),
+          h('p', { style: 'color: #777; font-size: 12px; padding-left: 20px;margin-top: 5px' }, '您确认要登记这条事故信息并生成涉案财物条形码')
+        ]),
+        showCancelButton: true,
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        beforeClose: (action, instance, done) => {
+          if (action === 'confirm') {
+            this.tableData.map((item) => {
+              item.itemCount = item.num
+              item.itemName = item.name
+            })
+            this.tableData.forEach((item) => {
+              delete item.num
+              delete item.name
+            })
+            let data = {
+              cabinetType: 3,
+              // doorNo: this.doorNo,
+              eventNo: this.idCard,
+              name: this.suspect,
+              doorNo: this.selectDoorNo,
+              inventoryAttacheDTOs: this.tableData
+            }
+            checkIn(data).then((res) => {
+              if (res.result) {
+                this.$message({
+                  message: res.msg,
+                  type: 'success'
+                })
+                this.toBeStoredList()
+                done()
+                this.suspect = ''
+                this.idCard = ''
+                this.tableData = []
+                this.selectDoorNo = ''
+              }
+            }).catch()
+          } else {
+            done()
+          }
+        }
+      }).then()
+    },
+    toBeStoredList() {
+      let params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize,
+        cabinetType: 3,
+        storeStatus: 0 // 0待存，1已存，2取出，3部分在存
       }
-      console.log(obj)
-      this.suspect = ''
-      this.idCard = ''
-      this.tableData = []
-      this.selectDoorNo = ''
+      toBeStoredList(params).then((res) => {
+        if (res.result) {
+          this.storeList = res.rows
+          this.total = res.total
+        }
+      }).catch()
     },
     effectsManagementFn() {
       this.listDialogVisible = true

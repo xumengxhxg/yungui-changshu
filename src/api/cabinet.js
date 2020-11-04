@@ -265,3 +265,12 @@ export function getTemperature() {
       method: 'get'
   })
 }
+
+// 
+export function getPersonalItemList(data) {
+  return request({
+      url: '/cloudcabinet/inventoryInfo/getPersonalItemList',
+      method: 'post',
+      data: data
+  })
+}

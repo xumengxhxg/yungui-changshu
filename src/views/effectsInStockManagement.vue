@@ -56,12 +56,12 @@
           <el-table-column
             label="嫌疑人"
             width="180"
-            prop="caseName"
+            prop="suspectName"
             align="center">
           </el-table-column>
           <el-table-column
             label="身份证号"
-            prop="caseNo"
+            prop="identityCard"
             align="center">
           </el-table-column>
           <el-table-column
@@ -69,28 +69,26 @@
             width="100"
             align="center">
             <template slot-scope="scope">
-              {{scope.row.caseType ? '危险驾驶' : '交通肇事'}}
             </template>
           </el-table-column>
           <el-table-column
             label="存入时间"
-            prop="suspectName"
+            prop="storeTime"
             align="center">
           </el-table-column>
           <el-table-column
             label="取出时间"
+            prop="fetchTime"
             align="center">
             <template slot-scope="scope">
-              {{scope.row.caseStatus == 0 ? '立案' : scope.row.caseStatus == 1 ? '破案' : scope.row.caseStatus == 2 ? '结案' : '暂无'}}
+              {{scope.row.storeStatus == 0 ? '待存' : scope.row.caseStatus == 1 ? '已出' : scope.row.caseStatus == 2 ? '取出' : '部分在存'}}
             </template>
           </el-table-column>
           <el-table-column
             label="物品状态"
             align="center">
             <template slot-scope="scope">
-              <span v-if="scope.row.licenseStatus == 0">未吊销</span>
-              <span v-else-if="scope.row.licenseStatus == 1">吊销</span>
-              <span v-else>无驾驶证</span>
+              {{scope.row.storeStatus == 0 ? '待存' : scope.row.caseStatus == 1 ? '已出' : scope.row.caseStatus == 2 ? '取出' : '部分在存'}}
             </template>
           </el-table-column>
           <el-table-column
@@ -120,7 +118,7 @@
 </template>
 
 <script>
-import { getCaseList } from '@/api/cabinet'
+import { getCaseList, getPersonalItemList } from '@/api/cabinet'
 import { formatDate } from '@/utils/global'
 export default {
   data () {
@@ -135,13 +133,31 @@ export default {
      pageNum: 1,
      pageSize: 10,
      total: 0,
-     options: [{label: '出库', value: 1},{label: '在库', value: 0}]
+     options: [{label: '待存', value: 0},{label: '已存', value: 1}, {label: '取出', value: 2}, {label: '部分在村', value: 3}]
     }
   },
   created() {
     this.getCaseList()
+    this.getPersonalItemList()
   },
   methods: {
+    getPersonalItemList() {
+      let data = {
+        cabinetType: 3,
+        endTime: this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : '',
+        startTime:  this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : '',
+        suspectName: this.form.name,
+        identityCard: this.form.idCard,
+        storeStatus: this.form.status,
+        itemStatus: 0
+      }
+      getPersonalItemList(data).then((res) => {
+        if (res.result) {
+          this.tableData = res.rows
+          this.total = res.total
+        }
+      }).catch() 
+    },
     getCaseList() {
       let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
       let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
