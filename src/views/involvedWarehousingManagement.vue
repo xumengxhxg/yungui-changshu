@@ -14,16 +14,13 @@
           <div class="pv20">
             <!-- 查询输入框 -->
             <div>
-              <el-autocomplete popper-class="my-autocomplete" class="inline-input" style="width: 500px"  v-model="caseSelect" :fetch-suggestions="querySearch" placeholder="搜索说明：输入身份证号"  :select-when-unmatched='true' @select="handleSelect" @change="handleChange">
+              <el-autocomplete popper-class="my-autocomplete" class="inline-input" style="width: 500px"  v-model="caseSelect" :fetch-suggestions="querySearch" placeholder="搜索说明：输入案件编号"  :select-when-unmatched='true' @select="handleSelect" @change="handleChange">
                 <template slot="prepend">选择案件</template>
                 <el-button slot="append" type="primary" style="background: #0C8EF6; color: #fff" @click="searchCase">添加</el-button>
                 <template slot-scope="{ item }">
                   <div style="border-bottom: 1px solid #ededed">
-                    <div class="item1">{{ item.value }}</div>
-                    <div class="clearfix">
-                      <div class="item2 pull-left">{{ item.value2 }}</div>
-                      <div class="item2 pull-right">查获时间：{{ item.value3 }}</div>
-                    </div>
+                        <div class="item1">{{ item.value }}</div>
+                        <div class="item2">{{ item.value2 }}</div>
                   </div>
                 </template>
               </el-autocomplete>
@@ -201,13 +198,13 @@
                   @row-click='rowClick'
                   style="width: 100%; border: 1px solid #ededed; border-bottom: 0px">
                   <el-table-column
-                  label="人员姓名"
-                    prop="suspectName"
+                  label="案件名称"
+                    prop="caseName"
                     width="120">
                   </el-table-column>
                   <el-table-column
-                    label="身份证号"
-                    prop="identityCard">
+                    label="案件编号"
+                    prop="eventNo">
                   </el-table-column>
                   <!-- <el-table-column
                     label="柜门"
@@ -412,13 +409,13 @@ export default {
       let data = {
         // cabinetType: 2
       }
-      getAccidentList(data).then((res) => {
+      getCaseList(data).then((res) => {
         if (res.result) {
           this.restaurants = res.rows.map((item, index) => {
             return {
-              value: item.identityCard,
-              value2: item.suspectName,
-              value3: item.discoverTime
+              value: item.caseNo,
+              // value2: item.caseName,
+              value2: item.caseName
             }
           })
         }
@@ -467,7 +464,7 @@ export default {
           search: this.caseSelect,
           discoverTime: this.caseSelectDiscoverTime
         }
-        getAccidentList(data).then((res) => {
+        getCaseList(data).then((res) => {
           if (res.result) {
             this.accidentInfo = res.rows[0]
           }
@@ -648,7 +645,7 @@ export default {
             let data = {
               cabinetType: 2,
               // doorNo: this.doorNo,
-              eventNo: this.accidentInfo.accidentNo,
+              eventNo: this.accidentInfo.caseNo,
               inventoryAttacheDTOs: this.propertyList
             }
             checkIn(data).then((res) => {
