@@ -15,7 +15,7 @@
             <!-- 查询输入框 -->
             <div>
               <el-autocomplete popper-class="my-autocomplete" class="inline-input" style="width: 500px"  v-model="caseSelect" :fetch-suggestions="querySearch" placeholder="搜索说明：输入身份证号"  :select-when-unmatched='true' @select="handleSelect" @change="handleChange">
-                <template slot="prepend">选择事项</template>
+                <template slot="prepend">选择案件</template>
                 <el-button slot="append" type="primary" style="background: #0C8EF6; color: #fff" @click="searchCase">添加</el-button>
                 <template slot-scope="{ item }">
                   <div style="border-bottom: 1px solid #ededed">

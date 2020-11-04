@@ -130,7 +130,7 @@
   </div>
 </template>
 <script>
-import { getAccidentList,deleteAccident,getCaseDetail,updateAccident,addAccident,addCase,updateCase,deleteCase } from '@/api/caseManagement'
+import { getCaseList,updateCase,addCase,deleteCase} from '@/api/caseManagement'
 export default {
   data(){
       return {
@@ -200,7 +200,7 @@ export default {
       },
 
       initTableList(){ //初始化table
-          getAccidentList(params).then((res) => {
+          getCaseList(this.searchObj).then((res) => {
           if(res.result){
              this.tableObj.records=res.rows
              this.tableObj.total=res.total
@@ -242,7 +242,7 @@ export default {
           //   ids:ids
           // }
           // console.log(delTags())
-          deleteAccident(ids).then(res=>{
+          deleteCase(ids).then(res=>{
           if(res.result){
             this.$message.success('删除成功');
             this.searchObj.pageNum=1;
@@ -268,7 +268,7 @@ export default {
           //   ids:ids
           // }
           // console.log(delTags())
-          deleteAccident(ids).then(res=>{
+          deleteCase(ids).then(res=>{
           if(res.result){
             this.$message.success('删除成功');
             this.searchObj.pageNum=1;
@@ -289,7 +289,7 @@ export default {
               if (valid) {
                 // this.ruleForm.useStatus=1
                   if(this.accident_type===1){
-                    addAccident(this.addruleForm).then((res) => {
+                    addCase(this.addruleForm).then((res) => {
                     if(res.result){
                         this.initTableList();
                         this.$message.success('添加成功');
@@ -299,7 +299,7 @@ export default {
                     }
                     })
                   }else{
-                    updateAccident(this.addruleForm).then(res=>{
+                    updateCase(this.addruleForm).then(res=>{
                       if(res.result){
                           this.initTableList()
                           this.$message.success('修改成功');
