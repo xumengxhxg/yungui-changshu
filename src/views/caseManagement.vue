@@ -10,15 +10,15 @@
               <div>
                 <span style="display: inline-block;margin-top: 10px;">
                   <span>案件名称：</span>
-                  <el-input v-model="searchObj.suspectName" size="small" placeholder="请输入案件名称" style="width: 200px;margin-right: 20px;" ></el-input>
+                  <el-input v-model="searchObj.caseName" size="small" placeholder="请输入案件名称" style="width: 200px;margin-right: 20px;" ></el-input>
                 </span>
                 <span style="display: inline-block;margin-top: 10px;">
                   <span>案件编号：</span>
-                  <el-input v-model="searchObj.identityCard" size="small" placeholder="请输入案件编号" style="width: 200px;margin-right: 20px;" ></el-input>
+                  <el-input v-model="searchObj.caseNo" size="small" placeholder="请输入案件编号" style="width: 200px;margin-right: 20px;" ></el-input>
                 </span>
                 <span style="display: inline-block;margin-top: 10px;">
                   <span>主办人：</span>
-                  <el-input v-model="searchObj.discoverDept" size="small" placeholder="请输入主办人" style="width: 200px;margin-right: 20px;" ></el-input>
+                  <el-input v-model="searchObj.sponsor" size="small" placeholder="请输入主办人" style="width: 200px;margin-right: 20px;" ></el-input>
                 </span>
                 <span style="display: inline-block;margin-top: 10px;">
                  <el-button size="small" style="margin-right: 20px;" type="warning" icon="el-icon-refresh" @click="refresh()">重置</el-button>
@@ -51,25 +51,25 @@
                 >
                 </el-table-column>
                 <el-table-column
-                prop="accidentNo"
+                prop="caseName"
                 label="案件名称"
                 align="center"
                 >
                 </el-table-column>
                 <el-table-column
-                prop="suspectName"
+                prop="caseNo"
                 label="案件编号"
                 align="center"
                 >
                 </el-table-column>
                 <el-table-column
-                prop="identityCard"
+                prop="sponsor"
                 label="主办人"
                 align="center"
                 >
                 </el-table-column>
                 <el-table-column
-                prop="iotCard"
+                prop="cosponsor"
                 label="协办人"
                 width="70"
                 align="center"
@@ -103,19 +103,19 @@
             <div style="clear: both;"></div>
         </div>
         <!-- 新增开始 -->
-        <el-dialog :title="accident_type===1?'新增事项':'编辑事项'" width="700px" class="handle_dialog" :visible.sync="addDialogFormVisible">
+        <el-dialog :title="accident_type===1?'新增案件':'编辑案件'" width="700px" class="handle_dialog" :visible.sync="addDialogFormVisible">
         <el-form  :model="addruleForm" label-width="200px" :rules="addrules" ref="addruleForm" class="demo-ruleForm" style="padding-left:20px">
-          <el-form-item label="案件编号：" prop="suspectName">
-            <el-input v-model="addruleForm.suspectName" placeholder="请输入人员姓名" style="width: 300px;" ></el-input>
+          <el-form-item label="案件编号：" prop="caseNo">
+            <el-input v-model="addruleForm.caseNo" placeholder="请输入案件编号" style="width: 300px;" ></el-input>
           </el-form-item>
-          <el-form-item label="案件名称：" prop="identityCard">
-            <el-input v-model="addruleForm.identityCard" placeholder="请输入身份证号" style="width: 300px;" ></el-input>
+          <el-form-item label="案件名称：" prop="caseName">
+            <el-input v-model="addruleForm.caseName" placeholder="请输入案件名称" style="width: 300px;" ></el-input>
           </el-form-item>
-          <el-form-item label="主办人：" >
-              <el-input v-model="addruleForm.identityCard" placeholder="请输入身份证号" style="width: 300px;" ></el-input>
+          <el-form-item label="主办人：" prop="sponsor">
+              <el-input v-model="addruleForm.sponsor" placeholder="请输入主办人" style="width: 300px;" ></el-input>
           </el-form-item>
           <el-form-item label="协办人：" >
-            <el-input v-model="addruleForm.driverCard" placeholder="请输入协办人" style="width: 300px;" ></el-input>
+            <el-input v-model="addruleForm.cosponsor" placeholder="请输入协办人" style="width: 300px;" ></el-input>
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -135,53 +135,39 @@ export default {
   data(){
       return {
           searchObj:{
-              suspectName:'',//人员姓名：
-              identityCard:'',//身份证号：
-              discoverDept:'',//查处中队：
-              caseStatus:'',
-              time:[],
+              caseName:'',
+              caseNo:'',
+              sponsor:'',
               pageNum:1,//当前页码
               pageSize:10,//当前pageseze
           },
           tableObj:{
               total:0,//数据总条数
               records:[],//table数据
-              records: [],
               offset:1,//当前页码
               limit:10,//
           },
           selectTr:[],//选中的数据
           addDialogFormVisible:false,//弹窗默认状态
-          caseDialogFormVisible:false,//弹窗默认状态
           accident_type:1,// 事故1添加  还是 2修改
           case_type:1,//案件1添加  还是 2修改
           addruleForm: {
-            suspectName: '',//人员姓名
-            identityCard: '',//身份证号
-            sex:1,//默认为男
-            driverCard:'',//驾驶证号码
-            carType:'',//车辆类型
-            ethanolContent:'',//血液乙醇含量(mg/100ml)
-            discoverType:'',//查处类型：
-            discoverTime:'',//查获时间
-            discoverDept:'',//查获中队
-            description:'',//简要案情
-            // useStatus:1,
-            // iotCard:''
+            caseName: '',
+            caseNo: '',
+            sponsor:'',
+            cosponsor:'',
+           
           },
           submitBtn:false,
           addrules: {
-            suspectName: [
-                  { required: true, message: '请输入人员姓名', trigger: 'blur' },
+            caseName: [
+                  { required: true, message: '请输入案件名称', trigger: 'blur' },
               ],
-            identityCard: [
-                { required: true, message: '请输入身份证号', trigger: 'blur' }
+            caseNo: [
+                { required: true, message: '请输入案件编号', trigger: 'blur' }
               ],
-            // driverCard: [
-            //     { required: true, message: '请输入驾驶证号码', trigger: 'blur' }
-            //   ],
-            carType: [
-                { required: true, message: '请选择车辆类型', trigger: 'blur' }
+            sponsor: [
+                { required: true, message: '请输入主办人', trigger: 'blur' }
               ],
             
             },
@@ -201,16 +187,10 @@ export default {
           this.addruleForm=this.$public.deepClone(obj)
        }else{
           this.addruleForm= {
-            suspectName: '',//人员姓名
-            identityCard: '',//身份证号
-            sex:1,//默认为男
-            driverCard:'',//驾驶证号码
-            carType:'',//车辆类型
-            ethanolContent:'',//血液乙醇含量(mg/100ml)
-            discoverType:'',//查处类型：
-            discoverTime:'',//查获时间
-            discoverDept:'',//查获中队
-            description:'',//简要案情
+            caseName: '',
+            caseNo: '',
+            sponsor:'',
+            cosponsor:'',
           }
           this.$nextTick(()=>{
           this.$refs.addruleForm.resetFields(); 
@@ -218,76 +198,10 @@ export default {
        }
        this.addDialogFormVisible=true;
       },
-      changecaseData(num,obj){
-       
-         this.case_type=num;
-        if(num===1){
-          this.editruleForm=this.$public.deepClone(obj);
-          // this.$nextTick(()=>{
-          //   this.$refs.editruleForm.resetFields(); 
-          // })
-          this.caseDialogFormVisible=true;
-        }else{
-          var data={
-           id:obj.caseId
-         }
-         getCaseDetail(data).then(res=>{
-           if(res.result){
-            this.editruleForm=res.data;
-            if(num===2){
-              this.editruleForm.accidentId=obj.id
-            }
-            this.editruleForm.caseType=''+this.editruleForm.caseType;
-            this.editruleForm.caseStatus=''+this.editruleForm.caseStatus;
-            this.editruleForm.licenseStatus=''+this.editruleForm.licenseStatus;
-            this.editruleForm.finishTime=this.editruleForm.finishTime==="1900-01-01 00:00:00"?null:this.editruleForm.finishTime;
-            this.editruleForm.solveTime=this.editruleForm.solveTime==="1900-01-01 00:00:00"?null:this.editruleForm.solveTime;
-            this.caseDialogFormVisible=true;
-           }else{
-             window_warning(res.msg)
-           }
-         }).catch()
-        }
-         
-        
 
-      },
-      delecase(){ //删除案件信息
-       this.$confirm('确认删除案件信息?', '提示',{
-            type: 'warning'
-        }).then((res)=>{
-          var ids=[this.editruleForm.id]
-         deleteCase(ids).then(res=>{
-           if(res.result){
-             this.$message.success('删除案件信息成功');
-             this.caseDialogFormVisible = false;
-          this.initTableList();
-           }else{
-             window_warning(res.msg)
-           }
-         }).catch()
-        }).catch()
-      
-      },
       initTableList(){ //初始化table
-          if(this.searchObj.time.length>0){
-            this.searchObj.startTime=this.searchObj.time[0]+" 00:00:00"
-            this.searchObj.endTime=this.searchObj.time[1]+" 23:59:59"
-          }else{
-            this.searchObj.startTime=''
-            this.searchObj.endTime=''
-          }
-          console.log(this.searchObj);
-          let params=this.$public.deepClone(this.searchObj);
-          params.time=[]
-         
           getAccidentList(params).then((res) => {
           if(res.result){
-             if(res.rows.length>0){
-              res.rows.forEach(item=>{
-                item.status=item.useStatus?'未使用':'使用'
-              })
-             }
              this.tableObj.records=res.rows
              this.tableObj.total=res.total
           }else{
@@ -297,11 +211,10 @@ export default {
       },
       refresh(){
           this.searchObj={
-              suspectName:'',//人员姓名：
-              identityCard:'',//身份证号：
-              discoverDept:'',//查处中队：
-              caseStatus:'',
-              time:[],
+              caseName:'',
+              caseNo:'',
+              sponsor:'',
+              cosponsor:'',
               pageNum:1,//当前页码
               pageSize:10,//当前pageseze
           },
@@ -375,7 +288,6 @@ export default {
           this.$refs[formName].validate((valid) => {
               if (valid) {
                 // this.ruleForm.useStatus=1
-                if(this.addDialogFormVisible){ //事故弹出框
                   if(this.accident_type===1){
                     addAccident(this.addruleForm).then((res) => {
                     if(res.result){
@@ -397,30 +309,7 @@ export default {
                         }
                     })
                   }
-                }else if(this.caseDialogFormVisible){ //案件弹出框
-                  if(this.case_type===1){
-                    this.editruleForm.accidentId=this.editruleForm.id
-                    addCase(this.editruleForm).then((res) => {
-                    if(res.result){
-                        this.initTableList();
-                        this.$message.success('立案成功');
-                        this.caseDialogFormVisible=false;
-                    }else{
-                      window_warning(res.msg);
-                    }
-                    })
-                  }else{
-                    updateCase(this.editruleForm).then(res=>{
-                      if(res.result){
-                          this.initTableList()
-                          this.$message.success('修改成功');
-                          this.caseDialogFormVisible=false;
-                      }else{
-                        window_warning(res.msg);
-                        }
-                    })
-                  }
-                }
+                
                 
               } else {
               this.submitBtn=true
