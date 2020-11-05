@@ -10,7 +10,7 @@
           <el-form-item label="案件编号：">
             <el-input v-model="form.caseNo" size="small" placeholder="请输入案件编号"></el-input>
           </el-form-item>
-          <el-form-item label="案件类型：">
+          <!-- <el-form-item label="案件类型：">
             <el-select v-model="form.caseType" size="small" placeholder="请选择案件类型">
               <el-option
                 v-for="item in options"
@@ -29,7 +29,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期">
             </el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="案件名称：">
             <el-input v-model="form.caseName" size="small" placeholder="请输入案件名称"></el-input>
           </el-form-item>
@@ -63,7 +63,7 @@
             prop="caseNo"
             align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             label="案件类型"
             width="100"
             align="center">
@@ -91,13 +91,18 @@
               <span v-else-if="scope.row.licenseStatus == 1">吊销</span>
               <span v-else>无驾驶证</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             label="主办人"
             prop="sponsor"
             align="center">
           </el-table-column>
-          <el-table-column
+           <el-table-column
+            label="协办人"
+            prop="cosponsor"
+            align="center">
+          </el-table-column>
+          <!-- <el-table-column
             label="立案时间"
             width="150"
             prop="caseTime"
@@ -109,7 +114,7 @@
             <template slot-scope="scope">
               {{scope.row.storeStatus == 0 ? '待存' : scope.row.storeStatus == 1 ? '已存' : '取出'}}
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             label="操作"
             align="center">
@@ -145,9 +150,9 @@ export default {
         cabinetType: 1,
         caseName: '',
         caseNo: '',
-        caseType: '',
-        doorNo: '',
-        date: []
+        // caseType: '',
+        // doorNo: '',
+        // date: []
      },
      tableData: [],
      pageNum: 1,
@@ -161,16 +166,16 @@ export default {
   },
   methods: {
     queryFiles() {
-      let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
-      let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
+      // let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
+      // let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
       let data = {
         cabinetType: 1,
         caseName: this.form.caseName,
         caseNo: this.form.caseNo,
-        caseType: this.form.caseType,
-        doorNo: this.form.doorNo,
-        startTime: startTime,
-        endTime: endTime
+        // caseType: this.form.caseType,
+        // doorNo: this.form.doorNo,
+        // startTime: startTime,
+        // endTime: endTime
       }
       queryFiles(data).then((res) => {
         if (res.result) {

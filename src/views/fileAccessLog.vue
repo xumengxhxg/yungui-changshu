@@ -13,7 +13,7 @@
           <el-form-item label="案件名称：">
             <el-input v-model="form.caseName" size="small" placeholder="请输入案件姓名"></el-input>
           </el-form-item>
-          <el-form-item label="查询时间段：">
+          <!-- <el-form-item label="查询时间段：">
             <el-date-picker
               size="small"
               v-model="form.date"
@@ -28,7 +28,7 @@
           </el-form-item>
           <el-form-item label="柜号：">
             <el-input v-model="form.doorNo" size="small" placeholder="请输入柜号"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button type="warning" size="small" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button type="primary" size="small" icon="el-icon-search" @click="getRecordList">搜索</el-button>
@@ -76,8 +76,14 @@
             align="center">
           </el-table-column>
           <el-table-column
-            label="承办民警"
+            label="主办人"
             prop="sponsor"
+            width="100"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            label="协办人"
+            prop="cosponsor"
             width="100"
             align="center">
           </el-table-column>
@@ -117,9 +123,9 @@ export default {
         cabinetType: 1,
         caseName: '',
         caseNo: '',
-        sponsor: '',
-        doorNo: '',
-        date: [new Date(), new Date()]
+        // sponsor: '',
+        // doorNo: '',
+        // date: [new Date(), new Date()]
      },
      tableData: [],
      pageNum: 1,
@@ -133,22 +139,22 @@ export default {
   },
   methods: {
     getRecordList() {
-       let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
-      let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
+      //  let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
+      // let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
       let params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }
       let data = {
         cabinetType: 1,
-        suspectName: this.form.suspectName,
-        identityCard: this.form.identityCard,
+        // suspectName: this.form.suspectName,
+        // identityCard: this.form.identityCard,
         caseName: this.form.caseName,
         caseNo: this.form.caseNo,
-        doorNo: this.form.doorNo,
-        startTime: startTime,
-        endTime: endTime,
-        sponsor: this.form.sponsor
+        // doorNo: this.form.doorNo,
+        // startTime: startTime,
+        // endTime: endTime,
+        // sponsor: this.form.sponsor
       }
       getRecordList(params, data).then((res) => {
         if (res.result) {

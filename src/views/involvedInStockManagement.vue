@@ -8,13 +8,13 @@
       <!-- 查询 -->
       <div class="bg-white ph20 pv10">
         <el-form :inline="true" :model="form" class="demo-form-inline">
-          <el-form-item label="人员姓名：">
-           <el-input v-model="form.suspectName" size="small" placeholder="请输入人员姓名"></el-input>
+          <el-form-item label="案件编号：">
+           <el-input v-model="form.caseNo" size="small" placeholder="请输入人员姓名"></el-input>
           </el-form-item>
-          <el-form-item label="身份证号：">
-            <el-input v-model="form.identityCard" size="small" placeholder="请输入身份证号"></el-input>
+          <el-form-item label="案件名称：">
+            <el-input v-model="form.caseName" size="small" placeholder="请输入身份证号"></el-input>
           </el-form-item>
-          <el-form-item label="时间范围：">
+          <!-- <el-form-item label="时间范围：">
             <el-date-picker
               size="small"
               v-model="form.date"
@@ -23,7 +23,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期">
             </el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button type="warning" size="small" icon="el-icon-refresh" @click="reset">重置</el-button>
             <el-button type="primary" size="small" icon="el-icon-search" @click="getAccidentList">搜索</el-button>
@@ -53,33 +53,25 @@
                     </template>
                 </el-table-column>
                 <el-table-column
-                    label="人员姓名"
-                    prop="suspectName"
+                    label="案件编号"
+                    prop="caseNo"
                     width="120"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="身份证号"
-                    prop="identityCard"
+                    label="案件名称"
+                    prop="caseName"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="查获类型"
-                    width="100"
-                    align="center">
-                    <template slot-scope="scope">
-                      {{scope.row.discoverType ? '设卡查获' : '事故查获'}}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="查获中队"
-                    prop="discoverDept"
+                    label="主办人"
+                    prop="sponsor"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="查处时间"
+                    label="协办人"
                     width="90"
-                    prop="discoverTime"
+                    prop="cosponsor"
                     align="center">
                 </el-table-column>
                 <el-table-column
@@ -87,7 +79,7 @@
                     align="center"
                     width="170">
                     <template slot-scope="scope">
-                        <el-button type="primary" size="mini" @click="achieveBarcode(scope.row.accidentNo)">生成条形码</el-button>
+                        <el-button type="primary" size="mini" @click="achieveBarcode(scope.row.caseNo)">生成条形码</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -163,15 +155,17 @@
 </template>
 
 <script>
-import { getAccidentList, getProperty, achieveBarcode, haveStoredList } from '@/api/cabinet'
+import { getAccidentList, getProperty, achieveBarcode2, haveStoredList } from '@/api/cabinet'
 import { formatDate, download } from '@/utils/global'
 export default {
   data () {
     return {
         form: {
-          suspectName: '',
-          identityCard: '',
-          date: []
+          // suspectName: '',
+          // identityCard: '',
+          // date: []
+          caseName: '',
+          caseNo: ''
         },
         tableData: [],
         pageNum: 1,
@@ -201,18 +195,14 @@ export default {
       let data = {
         ajbh: val
       }
-      achieveBarcode(data).then((res) => {
+      achieveBarcode2(data).then((res) => {
         download('条形码.png', res)
       }).catch()
     },
     getAccidentList() {
-      let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
-      let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
       let data = {
-        suspectName: this.form.suspectName,
-        identityCard: this.form.identityCard,
-        startTime: startTime,
-        endTime: endTime,
+        caseName: this.form.caseName,
+        caseNo: this.form.caseNo,
         itemStatus: 1
       }
       haveStoredList(data).then((res) => {
@@ -235,10 +225,9 @@ export default {
     // 获取涉案财物列表
     getProperty(row) {
      let data = {
-       itemStatus: 1,
         // search: row.identityCard,
         inventoryId: row.id,
-        itemStatus: 1// 存储状态(0入库、1在库、2出库)
+        itemStatus: 1 // 存储状态(0入库、1在库、2出库)
       }
       getProperty(data).then((res) => {
         if (res.result) {

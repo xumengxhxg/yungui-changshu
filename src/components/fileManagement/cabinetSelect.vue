@@ -83,7 +83,7 @@
               <div class="cabinet-2">
                 <div></div>
               </div>
-              <div class="cabinet" v-for="item in cabinetNewList.slice(4, 6)" :key="item.doorNo" @click="select(item.doorNo)">
+              <div class="cabinet" v-for="item in cabinetNewList.slice(28, 30)" :key="item.doorNo" @click="select(item.doorNo)">
                <div :class="item.usedSpace + item.inExistence >= sum ? 'bg-c8ccce' : 'bg-ecf8ff'">
                   {{item.doorNo}}
                   <p>已用：{{item.usedSpace}} </p>

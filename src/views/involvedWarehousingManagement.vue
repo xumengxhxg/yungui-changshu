@@ -14,7 +14,7 @@
           <div class="pv20">
             <!-- 查询输入框 -->
             <div>
-              <el-autocomplete popper-class="my-autocomplete" class="inline-input" style="width: 500px"  v-model="caseSelect" :fetch-suggestions="querySearch" placeholder="搜索说明：输入身份证号"  :select-when-unmatched='true' @select="handleSelect" @change="handleChange">
+              <el-autocomplete popper-class="my-autocomplete" class="inline-input" style="width: 500px"  v-model="caseSelect" :fetch-suggestions="querySearch" placeholder="搜索说明：输入案件编号"  :select-when-unmatched='true' @select="handleSelect" @change="handleChange">
                 <template slot="prepend">选择案件</template>
                 <el-button slot="append" type="primary" style="background: #0C8EF6; color: #fff" @click="searchCase">添加</el-button>
                 <template slot-scope="{ item }">
@@ -22,7 +22,7 @@
                     <div class="item1">{{ item.value }}</div>
                     <div class="clearfix">
                       <div class="item2 pull-left">{{ item.value2 }}</div>
-                      <div class="item2 pull-right">查获时间：{{ item.value3 }}</div>
+                      <!-- <div class="item2 pull-right">查获时间：{{ item.value3 }}</div> -->
                     </div>
                   </div>
                 </template>
@@ -201,13 +201,13 @@
                   @row-click='rowClick'
                   style="width: 100%; border: 1px solid #ededed; border-bottom: 0px">
                   <el-table-column
-                  label="人员姓名"
-                    prop="suspectName"
+                  label="案件编号"
+                    prop="caseNo"
                     width="120">
                   </el-table-column>
                   <el-table-column
-                    label="身份证号"
-                    prop="identityCard">
+                    label="案件名称"
+                    prop="caseName">
                   </el-table-column>
                   <!-- <el-table-column
                     label="柜门"
@@ -217,7 +217,7 @@
                     label="操作"
                     width='250'>
                     <template slot-scope="scope">
-                      <el-button type="text" @click.stop="achieveBarcode(scope.row.eventNo)">打印条形码</el-button>
+                      <el-button type="text" @click.stop="achieveBarcode(scope.row.caseNo)">打印条形码</el-button>
                       <el-button type="text" @click.stop="removeCheck(scope.row.id, 1)">全部移除登记</el-button>
                     </template>
                   </el-table-column>
@@ -225,7 +225,7 @@
               </div>
               <div v-show="isShowPropertyTable" class="pull-left p10 property" style="width: 40%; box-sizing: border-box;background: #e5e9f2; position: relative;height: 260px;overflow: auto">
                 <i class="el-icon-arrow-left back-icon cursor" @click="hide"></i>
-                <div>事项内涉案财物（<span>{{propertyTotal}}</span>）</div>
+                <div>案件内涉案财物（<span>{{propertyTotal}}</span>）</div>
                 <ul style="padding-left: 10px; font-size: 12px">
                   <li style="border-bottom: 1px solid #c2c1c1">
                     <el-row style="height: 25px;line-height: 25px">
@@ -241,7 +241,7 @@
                       <el-col :span="8">{{item.itemName}}</el-col>
                       <el-col :span="8">{{item.itemNo}}</el-col>
                       <el-col :span="8" style="text-align: right">
-                        <span style="color: #F56C6C; " class="cursor" @click="removeCheck(item.id, 0)">移除登记</span>
+                        <span style="color: #F56C6C; " class="cursor" @click="removeCheck(item.id, 0, item.inventoryId)">移除登记</span>
                       </el-col>
                     </el-row>
                   </li>
@@ -277,7 +277,7 @@
 
 <script>
 import { download } from '@/utils/global'
-import { getPropertyCountByTime, getCaseList, getAccidentList, getRegisterCountByTime, toBeStoredList, checkIn, getCounterInfo, removeCheck, getProperty, achieveBarcode, removeAllPropertyCheck, removeSinglePropertyCheck } from '@/api/cabinet'
+import { getPropertyCountByTime, getCaseList, getAccidentList, getRegisterCountByTime, toBeStoredList, checkIn, getCounterInfo, removeCheck, getProperty, achieveBarcode2, removeAllPropertyCheck, removeSinglePropertyCheck } from '@/api/cabinet'
 export default {
   data () {
     return {
@@ -382,7 +382,7 @@ export default {
         // ajbh: '123456342313'
         ajbh: val
       }
-      achieveBarcode(data).then((res) => {
+      achieveBarcode2(data).then((res) => {
         // var blob = new Blob([res]);
         // const url = window.URL.createObjectURL(blob);
         // console.log(url)
@@ -410,15 +410,14 @@ export default {
     // 查询所有事故（下拉展示）
     loadAllAccident() {
       let data = {
-        // cabinetType: 2
+        cabinetType: 2
       }
-      getAccidentList(data).then((res) => {
+      getCaseList(data).then((res) => {
         if (res.result) {
           this.restaurants = res.rows.map((item, index) => {
             return {
-              value: item.identityCard,
-              value2: item.suspectName,
-              value3: item.discoverTime
+              value: item.caseNo,
+              value2: item.caseName
             }
           })
         }
@@ -464,10 +463,9 @@ export default {
         }
         // 获取事故列表
         let data = {
-          search: this.caseSelect,
-          discoverTime: this.caseSelectDiscoverTime
+          search: this.caseSelect
         }
-        getAccidentList(data).then((res) => {
+        getCaseList(data).then((res) => {
           if (res.result) {
             this.accidentInfo = res.rows[0]
           }
@@ -532,7 +530,7 @@ export default {
       // 查询涉案财物
       let params = {
         // search: row.eventNo,
-        inventoryId: row.id,
+        inventoryId: row.inventoryId,
         itemStatus: 0
       }
       getProperty(params).then((res) => {
@@ -648,7 +646,7 @@ export default {
             let data = {
               cabinetType: 2,
               // doorNo: this.doorNo,
-              eventNo: this.accidentInfo.accidentNo,
+              eventNo: this.accidentInfo.caseNo,
               inventoryAttacheDTOs: this.propertyList
             }
             checkIn(data).then((res) => {
@@ -701,7 +699,7 @@ export default {
             // 查询涉案财物
             let params = {
               // search: res.rows[0].eventNo,
-              inventoryId: res.rows[0].id,
+              inventoryId: res.rows[0].inventoryId,
               itemStatus: 0
             }
             getProperty(params).then((res) => {
@@ -716,7 +714,7 @@ export default {
       }).catch()
     },
     // 移除登记
-    removeCheck(id, val) {
+    removeCheck(id, val, val2) {
       this.$confirm('确定要移除登记吗？', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -735,7 +733,19 @@ export default {
               type: 'warning'
             })
             this.getRegisterCountByTime()
-            this.toBeStoredList()
+            // this.toBeStoredList()
+            // 查询涉案财物
+            let params = {
+              // search: row.eventNo,
+              inventoryId: val2,
+              itemStatus: 0
+            }
+            getProperty(params).then((res) => {
+              if (res.result) {
+                this.property = res.rows
+                this.propertyTotal = res.total
+              }
+            }).catch()
           }
         }).catch()
       }).catch(() => {

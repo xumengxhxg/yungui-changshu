@@ -7,7 +7,7 @@
       <!-- 查询 -->
       <div class="bg-white ph20 pv10">
         <el-form :inline="true" :model="form" class="demo-form-inline">
-          <el-form-item label="案件编号：">
+          <!-- <el-form-item label="案件编号：">
             <el-input v-model="form.caseNo" size="small" placeholder="请输入案件编号"></el-input>
           </el-form-item>
           <el-form-item label="案件类型：">
@@ -35,6 +35,12 @@
           </el-form-item>
           <el-form-item label="柜号：">
             <el-input v-model="form.doorNo" size="small" placeholder="请输入柜号"></el-input>
+          </el-form-item> -->
+          <el-form-item label="案件编号：">
+           <el-input v-model="form.caseNo" size="small" placeholder="请输入案件编号"></el-input>
+          </el-form-item>
+          <el-form-item label="案件名称：">
+            <el-input v-model="form.caseName" size="small" placeholder="请输入案件名称"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="warning" size="small" icon="el-icon-refresh" @click="reset">重置</el-button>
@@ -66,7 +72,7 @@
             prop="caseNo"
             align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             label="案件类型"
             width="100"
             align="center">
@@ -94,18 +100,23 @@
               <span v-else-if="scope.row.licenseStatus == 1">吊销</span>
               <span v-else>无驾驶证</span>
             </template>
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             label="主办人"
             prop="sponsor"
             align="center">
           </el-table-column>
-          <el-table-column
+           <el-table-column
+            label="协办人"
+            prop="cosponsor"
+            align="center">
+          </el-table-column>
+          <!-- <el-table-column
             label="立案时间"
             width="150"
             prop="caseTime"
             align="center">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             label="柜号"
             prop="doorNo"
@@ -146,10 +157,10 @@ export default {
     return {
      form: {
       caseNo: '',
-      caseType: '',
-      date: [],
+      // caseType: '',
+      // date: [],
       caseName: '',
-      doorNo: ''
+      // doorNo: ''
      },
      tableData: [],
      pageNum: 1,
@@ -171,15 +182,15 @@ export default {
       }).catch()
     },
     getCaseList() {
-      let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
-      let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
+      // let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
+      // let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
       let data = {
         caseNo: this.form.caseNo,
-        caseType: this.form.caseType,
-        startTime: startTime,
-        endTime: endTime,
+        // caseType: this.form.caseType,
+        // startTime: startTime,
+        // endTime: endTime,
         caseName: this.form.caseName,
-        doorNo: this.form.doorNo,
+        // doorNo: this.form.doorNo,
         storeStatus: 1
       }
       getCaseList(data).then((res) => {

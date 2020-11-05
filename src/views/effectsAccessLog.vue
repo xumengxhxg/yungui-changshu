@@ -30,7 +30,7 @@
           </el-form-item>
           <el-form-item>
             <el-button type="warning" size="small" icon="el-icon-refresh" @click="reset">重置</el-button>
-            <el-button type="primary" size="small" icon="el-icon-search" @click="" >搜索</el-button>
+            <el-button type="primary" size="small" icon="el-icon-search" @click="getRecordList" >搜索</el-button>
           </el-form-item>
         </el-form>
       </div>
@@ -50,29 +50,29 @@
           <el-table-column
             label="操作时间"
             width="180"
-            prop="caseName"
+            prop="createTime"
             align="center">
           </el-table-column>
           <el-table-column
             label="操作人"
             width="180"
-            prop="caseName"
+            prop="handlerName"
             align="center">
           </el-table-column>
           <el-table-column
             label="嫌疑人"
             width="180"
-            prop="caseName"
+            prop="suspectName"
             align="center">
           </el-table-column>
           <el-table-column
             label="身份证号"
-            prop="caseNo"
+            prop="identityCard"
             align="center">
           </el-table-column>
           <el-table-column
             label="柜号"
-            prop="caseNo"
+            prop="doorNo"
             align="center">
           </el-table-column>
           <el-table-column
@@ -80,7 +80,7 @@
             width="100"
             align="center">
             <template slot-scope="scope">
-              {{scope.row.caseType ? '危险驾驶' : '交通肇事'}}
+              {{scope.row.status == 1 ? '出柜' : '存柜'}}
             </template>
           </el-table-column>
         </el-table>
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import { getCaseList } from '@/api/cabinet'
+import { getRecordList } from '@/api/cabinet'
 import { formatDate } from '@/utils/global'
 export default {
   data () {
@@ -116,27 +116,29 @@ export default {
      tableData: [],
      pageNum: 1,
      pageSize: 10,
-     total: 0,
-     options: [{label: '出库', value: 1},{label: '在库', value: 0}]
+     total: 0
     }
   },
   created() {
-    this.getCaseList()
+    this.getRecordList()
   },
   methods: {
-    getCaseList() {
+    getRecordList() {
       let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
       let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
-      let data = {
-        caseNo: this.form.caseNo,
-        caseType: this.form.caseType,
-        startTime: startTime,
-        endTime: endTime,
-        caseName: this.form.caseName,
-        doorNo: this.form.doorNo,
-        storeStatus: 1
+      let params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
       }
-      getCaseList(data).then((res) => {
+      let data = {
+        cabinetType: 3,
+        suspectName: this.form.name,
+        identityCard: this.form.idCard,
+        doorNo: this.form.doorNo,
+        startTime: startTime,
+        endTime: endTime
+      }
+      getRecordList(params, data).then((res) => {
         if (res.result) {
           this.tableData = res.rows
           this.total = res.total
@@ -150,12 +152,15 @@ export default {
         date: [],
         doorNo: ''
       }
+      this.getRecordList()
     },
     handleSizeChange(val) {
       this.pageSize = val
+      this.getRecordList()
     },
     handleCurrentChange(val) {
       this.pageNum = val
+      this.getRecordList()
     }
   }
 }

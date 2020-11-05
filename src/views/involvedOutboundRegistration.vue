@@ -9,7 +9,13 @@
       <!-- 查询 -->
       <div class="bg-white ph20 pv10">
         <el-form :inline="true" :model="form" class="demo-form-inline">
-          <el-form-item label="人员姓名：">
+           <el-form-item label="案件编号：">
+           <el-input v-model="form.caseNo" size="small" placeholder="请输入人员姓名"></el-input>
+          </el-form-item>
+          <el-form-item label="案件名称：">
+            <el-input v-model="form.caseName" size="small" placeholder="请输入身份证号"></el-input>
+          </el-form-item>
+          <!-- <el-form-item label="人员姓名：">
            <el-input v-model="form.suspectName" size="small" placeholder="请输入人员姓名"></el-input>
           </el-form-item>
           <el-form-item label="身份证号：">
@@ -24,7 +30,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期">
             </el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item>
             <el-button type="warning" size="small" icon="el-icon-refresh" @click="reset" >重置</el-button>
             <el-button type="primary" size="small" icon="el-icon-search" @click="getAccidentList">搜索</el-button>
@@ -52,33 +58,26 @@
                       {{pageSize*(pageNum - 1) + scope.$index + 1}}
                     </template>
                 </el-table-column>
-                <el-table-column
-                    label="人员姓名"
-                    prop="suspectName"
+               <el-table-column
+                    label="案件编号"
+                    prop="caseNo"
                     width="120"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="身份证号"
-                    prop="identityCard"
+                    label="案件名称"
+                    prop="caseName"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="查获类型"
-                    width="100"
-                    align="center">
-                    <template slot-scope="scope">
-                      {{scope.row.discoverType ? '设卡查获' : '事故查获'}}
-                    </template>
-                </el-table-column>
-                <el-table-column
-                    label="查获中队"
-                    prop="discoverDept"
+                    label="主办人"
+                    prop="sponsor"
                     align="center">
                 </el-table-column>
                 <el-table-column
-                    label="查处时间"
-                    prop="discoverTime"
+                    label="协办人"
+                    width="90"
+                    prop="cosponsor"
                     align="center">
                 </el-table-column>
                 <el-table-column
@@ -174,9 +173,8 @@ export default {
   data () {
     return {
         form: {
-            suspectName: '',
-            identityCard: '',
-            date: []
+            caseName: '',
+            caseNo: ''
         },
         tableData: [],
         pageNum: 1,
@@ -201,14 +199,16 @@ export default {
       this.watchPicture = val
     },
     getAccidentList() {
-      let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
-      let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
+      // let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
+      // let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
       let data = {
-        suspectName: this.form.suspectName,
-        identityCard: this.form.identityCard,
-        startTime: startTime,
-        endTime: endTime,
-        itemStatus: 2
+        // suspectName: this.form.suspectName,
+        // identityCard: this.form.identityCard,
+        // startTime: startTime,
+        // endTime: endTime,
+        itemStatus: 2,
+        caseName: this.form.caseName,
+        caseNo: this.form.caseNo,
       }
       haveStoredList(data).then((res) => {
         if (res.result) {

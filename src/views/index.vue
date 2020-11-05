@@ -7,9 +7,9 @@
     </span>
     <span style="color: #fff;" >
       <span  class="public_c ">
-        <router-link class="public_c header_a" to="/frontDesk"  >
+        <!-- <router-link class="public_c header_a" to="/frontDesk"  >
             切换到前端系统
-        </router-link>
+        </router-link> -->
         <span class="public_c">
           <el-badge :is-dot="badgevalue" class="item" style="display: inline;">
               <i class="el-icon-message-solid " style="color: #fff;font-size: 20px;" @click="gowarning()"></i>
@@ -45,9 +45,9 @@
           text-color="#fff"
           active-text-color="#ffffff"
           router>
-          <el-menu-item index="indexHome" @click="toPage('indexHome')">
+          <!-- <el-menu-item index="indexHome" @click="toPage('indexHome')">
             <span slot="title">首页</span>
-          </el-menu-item>
+          </el-menu-item> -->
           <el-menu-item index="caseManagement" @click="toPage('caseManagement')">
             <span slot="title">案件管理</span>
           </el-menu-item>
@@ -105,7 +105,7 @@
               <el-menu-item index="fileAccessLog" @click="toPage('fileAccessLog')">存取日志</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-submenu index="#4">
+          <!-- <el-submenu index="#4">
             <template slot="title">
               <span>预警管理</span>
             </template>
@@ -113,13 +113,13 @@
               <el-menu-item index="cloudCabinetAlarm" @click="toPage('cloudCabinetAlarm')">云柜报警</el-menu-item>
               <el-menu-item index="serviceAlarm" @click="toPage('serviceAlarm')">业务报警</el-menu-item>
             </el-menu-item-group>
-          </el-submenu>
+          </el-submenu> -->
           <!-- <el-menu-item index="earlyWarningManagement" @click="toPage('earlyWarningManagement')">
             <span slot="title">预警管理</span>
           </el-menu-item> -->
-          <el-menu-item index="analysisAndJudgment" @click="toPage('analysisAndJudgment')">
+          <!-- <el-menu-item index="analysisAndJudgment" @click="toPage('analysisAndJudgment')">
             <span slot="title">分析研判</span>
-          </el-menu-item>
+          </el-menu-item> -->
           <el-menu-item index="userManagement" @click="toPage('userManagement')">
             <span slot="title">权限管理</span>
           </el-menu-item>

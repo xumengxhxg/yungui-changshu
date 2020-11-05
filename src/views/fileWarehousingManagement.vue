@@ -47,25 +47,25 @@
                         <td>案件名称：</td>
                         <td>{{caseInfo.caseName}}</td>
                       </tr>
-                      <tr>
+                      <!-- <tr>
                         <td>案件类型：</td>
                         <td>{{caseInfo.caseType ? '危险驾驶': '交通肇事'}}</td>
                         <td>嫌疑人：</td>
                         <td>{{caseInfo.suspectName}}</td>
-                      </tr>
-                      <tr>
+                      </tr> -->
+                      <!-- <tr>
                         <td>案件状态：</td>
                         <td>{{caseInfo.caseStatus == 0 ? '立案' : caseInfo.caseStatus == 1 ? '破案' :  caseInfo.caseStatus == 2 ? '结案' : '暂无'}}</td>
                         <td>驾驶证状态：</td>
                         <td v-if='caseInfo.licenseStatus == 0'>未吊销</td>
                         <td v-else-if="caseInfo.licenseStatus == 1">吊销</td>
                         <td v-else>无驾驶证</td>
-                      </tr>
+                      </tr> -->
                       <tr>
                         <td>主办人：</td>
                         <td>{{caseInfo.sponsor}}</td>
-                        <td>立案时间：</td>
-                        <td>{{caseInfo.caseTime}}</td>
+                        <td>协办人：</td>
+                        <td>{{caseInfo.cosponsor}}</td>
                       </tr>
                     </table>
                   </div>
@@ -357,6 +357,7 @@ export default {
     // 查询所有案件（下拉展示）
     loadAllAccident() {
       let data = {
+        cabinetType: 1
       }
       getCaseList(data).then((res) => {
         if (res.result) {

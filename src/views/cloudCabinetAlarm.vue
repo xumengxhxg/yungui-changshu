@@ -15,19 +15,19 @@
                   <el-option label="涉案财物柜" :value="2">涉案财物柜</el-option>
                 </el-select>
               </span>
-              <span style="display: inline-block;margin-top: 10px;">
+              <!-- <span style="display: inline-block;margin-top: 10px;">
                 <span>报警类型：</span>
-                <el-select v-model="searchObj.warningType" clearable style="width: 200px;margin-right: 20px;" size="small" placeholder="请选择">
+                <el-select v-model="searchObj.warningType" clearable style="width: 200px;margin-right: 20px;" size="small" placeholder="请选择"> -->
                   <!-- <el-option
                     v-for="item in indexTypeList"
                     :key="item.value"
                     :label="item.lable"
                     :value="item.value">
                   </el-option> -->
-                  <el-option label="离线" :value="0">离线</el-option>
+                  <!-- <el-option label="离线" :value="0">离线</el-option>
                   <el-option label="温度异常" :value="1">温度异常</el-option>
                 </el-select>
-              </span>
+              </span> -->
               <span style="display: inline-block;margin-top: 10px;">
                 <span>时间：</span>
                 <el-date-picker

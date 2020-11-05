@@ -7,7 +7,7 @@
       <!-- 查询 -->
        <div class="bg-white ph20 pv10">
         <el-form :inline="true" :model="form" class="demo-form-inline">
-          <el-form-item label="人员姓名：">
+          <!-- <el-form-item label="人员姓名：">
             <el-input v-model="form.suspectName" size="small" placeholder="请输入人员姓名"></el-input>
           </el-form-item>
           <el-form-item label="身份证号：">
@@ -25,6 +25,12 @@
           </el-form-item>
           <el-form-item label="柜号：">
             <el-input v-model="form.doorNo" size="small" placeholder="请输入柜号"></el-input>
+          </el-form-item> -->
+          <el-form-item label="案件编号：">
+           <el-input v-model="form.caseNo" size="small" placeholder="请输入人员姓名"></el-input>
+          </el-form-item>
+          <el-form-item label="案件名称：">
+            <el-input v-model="form.caseName" size="small" placeholder="请输入身份证号"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="warning" size="small" icon="el-icon-refresh" @click="reset">重置</el-button>
@@ -127,10 +133,12 @@ export default {
   data () {
     return {
      form: {
-       suspectName: '',
-       identityCard: '',
-       doorNo: '',
-       date: [new Date(), new Date()]
+      //  suspectName: '',
+      //  identityCard: '',
+      //  doorNo: '',
+      //  date: [new Date(), new Date()]
+      caseNo: '',
+      caseName: ''
      },
      tableData: [{
        name: 'sdef'
@@ -146,19 +154,21 @@ export default {
   },
   methods: {
     getRecordList() {
-      let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
-      let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
+      // let startTime = this.form.date[0] ? formatDate(this.form.date[0]) + ' 00:00:00' : ''
+      // let endTime = this.form.date[1] ? formatDate(this.form.date[1]) + ' 23:59:59' : ''
       let params = {
         pageNum: this.pageNum,
         pageSize: this.pageSize
       }
       let data = {
         cabinetType: 2,
-        suspectName: this.form.suspectName,
-        identityCard: this.form.identityCard,
-        doorNo: this.form.doorNo,
-        startTime: startTime,
-        endTime: endTime
+        // suspectName: this.form.suspectName,
+        // identityCard: this.form.identityCard,
+        // doorNo: this.form.doorNo,
+        // startTime: startTime,
+        // endTime: endTime
+        caseName: this.form.caseName,
+        caseNo: this.form.caseNo
       }
       getRecordList(params, data).then((res) => {
         if (res.result) {

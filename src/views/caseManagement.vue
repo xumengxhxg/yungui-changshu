@@ -106,7 +106,7 @@
         <el-dialog :title="accident_type===1?'新增案件':'编辑案件'" width="700px" class="handle_dialog" :visible.sync="addDialogFormVisible">
         <el-form  :model="addruleForm" label-width="200px" :rules="addrules" ref="addruleForm" class="demo-ruleForm" style="padding-left:20px">
           <el-form-item label="案件编号：" prop="caseNo">
-            <el-input v-model="addruleForm.caseNo" placeholder="请输入案件编号" style="width: 300px;" ></el-input>
+            <el-input v-model="addruleForm.caseNo" :disabled='accident_type !=1' placeholder="请输入案件编号" style="width: 300px;" ></el-input>
           </el-form-item>
           <el-form-item label="案件名称：" prop="caseName">
             <el-input v-model="addruleForm.caseName" placeholder="请输入案件名称" style="width: 300px;" ></el-input>
@@ -181,6 +181,7 @@ export default {
 
   methods: {
       changebaseData(num, obj){ //事故添加、修改
+      
        this.accident_type=num;
        
         if(num===2){

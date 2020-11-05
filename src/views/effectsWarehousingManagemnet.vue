@@ -12,7 +12,7 @@
         <div class="right-container pv20" style="wisth: 80%; margin: 0 auto">
           <el-form :inline="true"  class="demo-form-inline">
             <el-form-item label="嫌疑人：">
-              <el-input v-model="suspect" size="small" placeholder="审批人"></el-input>
+              <el-input v-model="suspect" size="small" placeholder="嫌疑人"></el-input>
             </el-form-item>
             <el-form-item label="身份证：">
               <el-input v-model="idCard" size="small" placeholder="身份证"></el-input>
@@ -37,7 +37,7 @@
               width="180">
               <template slot-scope="scope">
                 <el-button type="text" @click="editEffects(scope.row, scope.$index)">编辑</el-button>
-                <el-button type="text" @click="deleteEffectsInRegister">删除</el-button>
+                <el-button type="text" @click="deleteEffectsInRegister(scope.$index)">删除</el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -59,28 +59,33 @@
         :data="storelist"
         style="width: 80%; margin: 0 auto">
         <el-table-column
-          prop="name"
+          prop="suspectName"
           label="嫌疑人"
           width="180">
         </el-table-column>
         <el-table-column
-          prop="eventNo"
+          prop="identityCard"
           label="身份证"
           width="180">
         </el-table-column>
         <el-table-column
+          label="柜号"
+          prop="doorNo"
+          align="center">
+        </el-table-column>
+        <el-table-column
           label="随身物品">
-          <template>
-            <el-button type="text" @click="effectsManagementFn">物品列表管理</el-button>
+          <template slot-scope="scope">
+            <el-button type="text" @click="effectsManagementFn(scope.row.id)">物品列表管理</el-button>
           </template>
         </el-table-column>
         <el-table-column
           label="操作"
           width='200'>
           <template slot-scope="scope">
-            <el-button type="text" @click="addEffects(1)">新增随身物品</el-button>
+            <el-button type="text" @click="addEffects(1, scope.row.id)">新增随身物品</el-button>
             <el-button type="text" @click="editSuspect(scope.row)">编辑</el-button>
-            <el-button type="text" @click="deleteSuspect">删除</el-button>
+            <el-button type="text" @click="deleteSuspect(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -113,11 +118,11 @@
         :data="effectsList"
         style="width: 100%;">
         <el-table-column
-          prop="name"
+          prop="itemName"
           label="物品名称">
         </el-table-column>
         <el-table-column
-          prop="num"
+          prop="itemCount"
           label="物品数量"
           width="180">
         </el-table-column>
@@ -125,7 +130,7 @@
           label="操作"
           width="120">
           <template slot-scope="scope">
-            <el-button type="text" @click="deleteEffects">删除</el-button>
+            <el-button type="text" @click="deleteEffects(scope.row.id)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -159,7 +164,7 @@
 </template>
 
 <script>
-import { checkIn, toBeStoredList, getPersonalItemList } from '@/api/cabinet'
+import { checkIn, toBeStoredList, getPersonalItemList, getProperty, updateSuspect, addPersonalItem, removePersonalItemCheck, removeCheck } from '@/api/cabinet'
 import selectCabinet from '@/components/effectsManagement/selectCabinet'
 export default {
   components: {
@@ -190,18 +195,51 @@ export default {
       addEffectType: 0,
       pageNum: 1,
       pageSize: 10,
-      total: 0
+      total: 0,
+      currentId: '',
+      currentId2: '',
+      currentId3: ''
     }
   },
   created() {
-    this.toBeStoredList()
+    // this.toBeStoredList()
+    this.getPersonalItemList()
   },
   methods: {
-    addEffects(val) {
+    // 待存列表
+    getPersonalItemList() {
+      let data = {
+        cabinetType: 3,
+        itemStatus: 0
+      }
+      getPersonalItemList(data).then((res) => {
+        if (res.result) {
+          this.storelist = res.rows
+          this.total = res.total
+        }
+      })
+    },
+    getProperty(id) {
+      let data = {
+        inventoryId: id,
+        itemStatus: 0,
+        cabinetType: 3
+      }
+      getProperty(data).then((res) => {
+        if (res.result) {
+          this.effectsList = res.rows
+        }
+      }).catch()
+    },
+    addEffects(val, id) {
       this.title = '添加随身物品'
       this.effectsInfo = {name: '', num: 0}
       this.dialogVisible = true
       this.addEffectType = val
+      if (id) {
+        this.currentId2 = id
+      }
+      
     },
     cancel() {
       this.dialogVisible = false
@@ -216,7 +254,24 @@ export default {
         this.dialogVisible = false
         this.currentIndex = ''
       } else {
-        alert(1)
+        let data = {
+          items: [
+            {
+              inventoryId: this.currentId2,
+              itemName: this.effectsInfo.name,
+              itemCount: this.effectsInfo.num
+            }
+          ]
+        }
+        addPersonalItem(data).then((res) => {
+          if (res.result) {
+            this.dialogVisible = false
+             this.$message({
+              type: 'success',
+              message: '新增成功!'
+            })
+          }
+        }).catch()
       }
     },
     editEffects(row, index) {
@@ -226,12 +281,13 @@ export default {
       this.currentIndex = index
     },
     // 删除登记之前的物品
-    deleteEffectsInRegister() {
+    deleteEffectsInRegister(index) {
       this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.tableData.splice(index, 1)
         this.$message({
           type: 'success',
           message: '删除成功!'
@@ -254,6 +310,13 @@ export default {
       this.selectCabinetDialogVisible = true
     },
     register() {
+      if (!this.suspect || !this.idCard || !this.tableData.length || !this.selectDoorNo) {
+        this.$message({
+          message: '请完善登记信息',
+          type: 'warning'
+        })
+        return
+      }
       const h = this.$createElement;
       this.$msgbox({
         title: '',
@@ -262,7 +325,7 @@ export default {
             h('i', {class: 'el-icon-success', style: 'color: #67C23A; font-size: 18px'}),
             h('span', {style: 'display: inline-block; margin-left: 10px'}, '确认要登记这条信息吗？')
           ]),
-          h('p', { style: 'color: #777; font-size: 12px; padding-left: 20px;margin-top: 5px' }, '您确认要登记这条事故信息并生成涉案财物条形码')
+          h('p', { style: 'color: #777; font-size: 12px; padding-left: 20px;margin-top: 5px' }, '您确认要登记这条信息吗？')
         ]),
         showCancelButton: true,
         confirmButtonText: '确定',
@@ -291,7 +354,7 @@ export default {
                   message: res.msg,
                   type: 'success'
                 })
-                this.toBeStoredList()
+                this.getPersonalItemList()
                 done()
                 this.suspect = ''
                 this.idCard = ''
@@ -319,20 +382,28 @@ export default {
         }
       }).catch()
     },
-    effectsManagementFn() {
+    effectsManagementFn(id) {
       this.listDialogVisible = true
+      this.getProperty(id)
+      this.currentId3 = id
     },
     // 删除待办列表嫌疑人
-    deleteSuspect() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+    deleteSuspect(id) {
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+        removeCheck(id).then((res) => {
+          if (res.result) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.getPersonalItemList()
+          }
+          
+        }).catch()
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -344,29 +415,51 @@ export default {
     editSuspect(item) {
       this.suspectDialogVisible = true
       this.suspectInfo = {
-        name: item.name,
-        idCard: item.idCard
+        name: item.suspectName,
+        idCard: item.identityCard
       }
+      this.currentId = item.id
     },
     // 保存嫌疑人编辑信息
     saveEditSuspect() {
-      this.suspectDialogVisible = false
+      let data = {
+        cabinetType: 3,
+        eventNo: this.suspectInfo.idCard,
+        id: this.currentId,
+        name: this.suspectInfo.name
+      }
+      updateSuspect(data).then((res) => {
+        if (res.result) {
+          this.$message({
+            type: 'success',
+            message: '编辑成功!'
+          })
+          this.suspectDialogVisible = false
+          this.getPersonalItemList()
+        }
+      }).catch()
     },
     // 取消保存嫌疑人编辑信息
     cancelEditSuspect() {
       this.suspectDialogVisible = false
     },
     // 删除物品列表管理的某个物品
-    deleteEffects() {
-      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+    deleteEffects(id) {
+      this.$confirm('此操作将永久删除, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+        removePersonalItemCheck(id).then((res) => {
+          if (res.result) {
+            this.$message({
+              type: 'success',
+              message: '删除成功!'
+            })
+            this.getProperty(this.currentId3)
+          }
+        }).catch()
+        
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -376,6 +469,7 @@ export default {
     },
     confirm() {
       this.listDialogVisible = false
+      this.getPersonalItemList()
     }
   }
 }

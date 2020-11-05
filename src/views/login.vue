@@ -24,10 +24,10 @@
                 <i>密码</i>
                 <span><img src="../assets/images/pwd.png" alt=""></span>
             </div>
-            <div class="login-radio">
+            <!-- <div class="login-radio">
               <el-radio v-model="radio" label="1">前台系统</el-radio>
               <el-radio v-model="radio" label="2">后台系统</el-radio>
-            </div>
+            </div> -->
         </form>
         <div class="login-btn">
           <button type="button" id="submit" @click="login">登&nbsp;&nbsp;&nbsp;录</button>
@@ -47,7 +47,7 @@ export default {
     return {
       account: '',
       password: '',
-      radio: '1'
+      // radio: '1'
     }
   },
   created() {
@@ -81,13 +81,16 @@ export default {
             localStorage.setItem('token', res.token)
             this.getInfo()
           }
-          if (this.radio === '1') { // 前台
-            this.$router.push({name: 'frontDesk'})
-            localStorage.setItem('page', 'front')
-          } else { // 后台
-            this.$router.push({name: 'indexHome'})
-            localStorage.setItem('page', 'back')
-          }
+          this.$router.push({name: 'caseManagement'})
+          localStorage.setItem('page', 'back')
+          
+          // if (this.radio === '1') { // 前台
+          //   this.$router.push({name: 'frontDesk'})
+          //   localStorage.setItem('page', 'front')
+          // } else { // 后台
+          //   this.$router.push({name: 'indexHome'})
+          //   localStorage.setItem('page', 'back')
+          // }
         } else {
           window_warning('账号或密码出错')
           return false;

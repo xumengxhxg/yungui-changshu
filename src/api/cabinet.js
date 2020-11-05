@@ -22,7 +22,7 @@ export function getAccidentList(data) {
 // 案件搜索
 export function getCaseList(data) {
   return request({
-      url: '/cloudcabinet/inventoryInfo/getCaseList',
+      url: '/cloudcabinet/caseInfo/getCaseList',
       method: 'post',
       data: data
   })
@@ -270,6 +270,46 @@ export function getTemperature() {
 export function getPersonalItemList(data) {
   return request({
       url: '/cloudcabinet/inventoryInfo/getPersonalItemList',
+      method: 'post',
+      data: data
+  })
+}
+
+
+export function updateSuspect(data) {
+  return request({
+      url: '/cloudcabinet/inventoryInfo/updateSuspect',
+      method: 'post',
+      data: data
+  })
+}
+
+
+export function removeAllPropertyCheckNew(params) {
+  return request({
+      url: '/cloudcabinet/inventoryInfo/removeAllPropertyCheckNew',
+      method: 'get',
+      params: params
+  })
+}
+
+// 随身物品移除登记
+export function removePersonalItemCheck(id) {
+  return request({
+      url: '/cloudcabinet/inventoryInfo/removePersonalItemCheck?ids=' + id,
+      method: 'get'
+  })
+}
+export function removePersonalItemCheck2(id) {
+  return request({
+      url: '/cloudcabinet/inventoryInfo/removeAllPropertyCheckNew?inventoryId=' + id,
+      method: 'get'
+  })
+}
+// 新增随身物品
+export function addPersonalItem(data) {
+  return request({
+      url: '/cloudcabinet/inventoryInfo/addPersonalItem',
       method: 'post',
       data: data
   })

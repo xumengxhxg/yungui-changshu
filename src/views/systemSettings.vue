@@ -4,7 +4,7 @@
             系统设置
         </div>
         <div class="bg-white ph20 pv10">
-          <el-tabs v-model="activeName" @tab-click="handleClick">
+          <el-tabs v-model="activeName">
             
             <!-- 案卷柜 -->
             <el-tab-pane label="案卷柜" name="third">
@@ -15,8 +15,12 @@
                     </span>
                     <span style="display: inline-block;margin-top: 10px;width:50%">
                         <span style="display:inline-block;width:200px;text-align:right;font-size:15px;">柜门分配方式：</span>
-                        <el-radio v-model="indexObj2.distributionType" label="1">管理员设置</el-radio>
-                        <el-radio v-model="indexObj2.distributionType" label="2">系统自动分配</el-radio>
+                        <!-- <el-radio v-model="indexObj2.distributionType" label="1">管理员设置</el-radio>
+                        <el-radio v-model="indexObj2.distributionType" label="2">系统自动分配</el-radio> -->
+                        <el-radio-group v-model="indexObj2.distributionType">
+                            <el-radio :label="1">管理员设置</el-radio>
+                            <el-radio :label="2">系统自动分配</el-radio>
+                        </el-radio-group>
                     </span>
                 </div>
                 <div>
@@ -59,7 +63,7 @@ export default {
              indexObj2:{
                  cabinetType:1,
                  ipPort:"",//ip
-                 distributionType:'1',//柜门分配方式
+                 distributionType: '1',//柜门分配方式
                  mainNum:0,//主柜数量
                  viceNum:0,//副柜数量
                  mainLattice:0,//主柜格子数
@@ -71,51 +75,58 @@ export default {
     },
     created(){
         var obj={
-            cabinetType:0
+            cabinetType:1
         }
         getBaseSet(obj).then(res=>{
              if(res.result){
-                this.indexObj=res.data[0]
+                //  res.data[0].distributionTyp = String(res.data[0].distributionType)
+                this.indexObj2=res.data[0]
+                this.indexObj2.distributionTyp = String(res.data[0].distributionType)
+                console.log(res.data[0].ipPort, 778)
+                // this.indexObj2.ipPort = res.data[0].ipPort
+                console.log(this.indexObj2, 8844488)
              }else{
-                 window_warning(res.msg)
+                //  window_warning(res.msg)
              }
           }).catch()
     },
      methods: {
       handleClick(tab, event) {
         var obj={
-            cabinetType:0
+            cabinetType:1
         }
-        if(this.activeName==='first'){
-          getBaseSet(obj).then(res=>{
-             if(res.result){
-                this.indexObj=res.data[0]
-             }else{
-                 window_warning(res.msg)
-             }
-          }).catch()
-        }else if(this.activeName==='second'){
-            obj.cabinetType=2
-            getBaseSet(obj).then(res=>{
-             if(res.result){
-                this.indexObj1=res.data[0]
-                console.log(this.indexObj2)
-             }else{
-                 window_warning(res.msg)
-             }
-          }).catch()
-        }else{
+        // if(this.activeName==='first'){
+        //   getBaseSet(obj).then(res=>{
+        //      if(res.result){
+        //         this.indexObj=res.data[0]
+        //      }else{
+        //          window_warning(res.msg)
+        //      }
+        //   }).catch()
+        // }else if(this.activeName==='second'){
+        //     obj.cabinetType=2
+        //     getBaseSet(obj).then(res=>{
+        //      if(res.result){
+        //         this.indexObj1=res.data[0]
+        //         console.log(this.indexObj2)
+        //      }else{
+        //          window_warning(res.msg)
+        //      }
+        //   }).catch()
+        // }else
+        // {
             obj.cabinetType=1
             getBaseSet(obj).then(res=>{
              if(res.result){
                 this.indexObj2=res.data[0]
+                console.log(this.indexObj2, 8888)
                 this.indexObj2.distributionType=''+this.indexObj2.distributionType
              }else{
                  window_warning(res.msg)
                  
              }
           }).catch()
-        }
+        // }
       },
       submit(num){
           var obj;
