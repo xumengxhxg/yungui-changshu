@@ -97,7 +97,7 @@
             label="物品状态"
             align="center">
             <template slot-scope="scope">
-              {{scope.row.storeStatus == 0 ? '待存' : scope.row.caseStatus == 1 ? '已出' : scope.row.caseStatus == 2 ? '取出' : '部分在存'}}
+              {{scope.row.storeStatus == 0 ? '待存' : scope.row.storeStatus == 1 ? '已出' : scope.row.storeStatus == 2 ? '取出' : ''}}
             </template>
           </el-table-column>
           <el-table-column
@@ -182,7 +182,7 @@
 </template>
 
 <script>
-import { getCaseList, getPersonalItemList, getProperty, updateSuspect, removePersonalItemCheck2 } from '@/api/cabinet'
+import { getCaseList, getPersonalItemList, getProperty, updateSuspect, removePersonalItemCheck2, removeCheck } from '@/api/cabinet'
 import { formatDate } from '@/utils/global'
 export default {
   data () {
@@ -218,14 +218,16 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        removePersonalItemCheck2(id).then((res) => {
-          if (res.result) {
-            this.$message({
-              type: 'success',
-              message: '删除成功!'
-            })
-            this.getPersonalItemList()
-          }
+        removeCheck(id).then(() => {
+          removePersonalItemCheck2(id).then((res) => {
+            if (res.result) {
+              this.$message({
+                type: 'success',
+                message: '删除成功!'
+              })
+              this.getPersonalItemList()
+            }
+          }).catch()
         }).catch()
       }).catch(() => {
         this.$message({

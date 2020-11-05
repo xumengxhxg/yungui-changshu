@@ -733,19 +733,19 @@ export default {
               type: 'warning'
             })
             this.getRegisterCountByTime()
-            // this.toBeStoredList()
+            this.toBeStoredList()
             // 查询涉案财物
-            let params = {
-              // search: row.eventNo,
-              inventoryId: val2,
-              itemStatus: 0
-            }
-            getProperty(params).then((res) => {
-              if (res.result) {
-                this.property = res.rows
-                this.propertyTotal = res.total
-              }
-            }).catch()
+            // let params = {
+            //   // search: row.eventNo,
+            //   inventoryId: val2,
+            //   itemStatus: 0
+            // }
+            // getProperty(params).then((res) => {
+            //   if (res.result) {
+            //     this.property = res.rows
+            //     this.propertyTotal = res.total
+            //   }
+            // }).catch()
           }
         }).catch()
       }).catch(() => {
