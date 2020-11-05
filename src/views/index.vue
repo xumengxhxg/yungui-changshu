@@ -10,11 +10,11 @@
         <!-- <router-link class="public_c header_a" to="/frontDesk"  >
             切换到前端系统
         </router-link> -->
-        <span class="public_c">
+        <!-- <span class="public_c">
           <el-badge :is-dot="badgevalue" class="item" style="display: inline;">
               <i class="el-icon-message-solid " style="color: #fff;font-size: 20px;" @click="gowarning()"></i>
           </el-badge>
-        </span>
+        </span> -->
       </span>
       <span class="public_center">
 

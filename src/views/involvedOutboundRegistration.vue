@@ -10,10 +10,10 @@
       <div class="bg-white ph20 pv10">
         <el-form :inline="true" :model="form" class="demo-form-inline">
            <el-form-item label="案件编号：">
-           <el-input v-model="form.caseNo" size="small" placeholder="请输入人员姓名"></el-input>
+           <el-input v-model="form.caseNo" size="small" placeholder="请输入案件编号"></el-input>
           </el-form-item>
           <el-form-item label="案件名称：">
-            <el-input v-model="form.caseName" size="small" placeholder="请输入身份证号"></el-input>
+            <el-input v-model="form.caseName" size="small" placeholder="请输入案件名称"></el-input>
           </el-form-item>
           <!-- <el-form-item label="人员姓名：">
            <el-input v-model="form.suspectName" size="small" placeholder="请输入人员姓名"></el-input>

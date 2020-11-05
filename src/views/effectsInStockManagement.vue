@@ -14,7 +14,7 @@
           <el-form-item label="身份证号：">
             <el-input v-model="form.idCard" size="small" placeholder="请输入身份证号"></el-input>
           </el-form-item>
-          <el-form-item label="时间范围：">
+          <!-- <el-form-item label="时间范围：">
             <el-date-picker
               size="small"
               v-model="form.date"
@@ -23,7 +23,7 @@
               start-placeholder="开始日期"
               end-placeholder="结束日期">
             </el-date-picker>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="物品状态：">
             <el-select v-model="form.status" size="small" placeholder="请选择物品状态">
               <el-option

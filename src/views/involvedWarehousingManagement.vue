@@ -556,7 +556,7 @@ export default {
     savePropertyDialog() {
       if (!this.propertyItem.itemName || (!this.propertyItem.itemCount && this.propertyItem.itemCount != 0) || !this.propertyItem.storePicture) {
         this.$message({
-          message: '请输入物品名称，物品编号，并上传物品照片',
+          message: '请输入物品名称，物品数量，并上传物品照片',
           type: 'warning'
         })
         return
@@ -588,7 +588,7 @@ export default {
     save(val) {
       if (!val.itemName || (!val.itemCount && val.itemCount != 0) || !val.storePicture) {
         this.$message({
-          message: '请输入物品名称,物品名称，已经上传物品照片',
+          message: '请输入物品名称,物品数量，已经上传物品照片',
           type: 'warning'
         })
         return
@@ -618,7 +618,7 @@ export default {
             h('i', {class: 'el-icon-success', style: 'color: #67C23A; font-size: 18px'}),
             h('span', {style: 'display: inline-block; margin-left: 10px'}, '确认要登记这条信息吗？')
           ]),
-          h('p', { style: 'color: #777; font-size: 12px; padding-left: 20px;margin-top: 5px' }, '您确认要登记这条事故信息并生成涉案财物条形码')
+          h('p', { style: 'color: #777; font-size: 12px; padding-left: 20px;margin-top: 5px' }, '您确认要登记这条案件信息并生成涉案财物条形码')
         ]),
         showCancelButton: true,
         confirmButtonText: '确定',

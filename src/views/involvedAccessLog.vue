@@ -27,10 +27,10 @@
             <el-input v-model="form.doorNo" size="small" placeholder="请输入柜号"></el-input>
           </el-form-item> -->
           <el-form-item label="案件编号：">
-           <el-input v-model="form.caseNo" size="small" placeholder="请输入人员姓名"></el-input>
+           <el-input v-model="form.caseNo" size="small" placeholder="请输入案件编号"></el-input>
           </el-form-item>
           <el-form-item label="案件名称：">
-            <el-input v-model="form.caseName" size="small" placeholder="请输入身份证号"></el-input>
+            <el-input v-model="form.caseName" size="small" placeholder="请输入案件名称"></el-input>
           </el-form-item>
           <el-form-item>
             <el-button type="warning" size="small" icon="el-icon-refresh" @click="reset">重置</el-button>
@@ -62,29 +62,29 @@
             width="150">
           </el-table-column>
           <el-table-column
-            label="物品名称"
+            label="案件编号"
             width="180"
-            prop="itemNames"
+            prop="caseNo"
             align="center">
           </el-table-column>
           <el-table-column
-            label="物品编号"
-            prop="itemNos"
+            label="案件名称"
+            prop="caseName"
             align="center">
           </el-table-column>
           <el-table-column
-            label="人员姓名"
+            label="主办人"
             width="100"
-            prop="suspectName"
+            prop="sponsor"
             align="center">
           </el-table-column>
           <el-table-column
-            label="身份证"
-            prop="identityCard"
+            label="协办人"
+            prop="cosponsor"
             width="170"
             align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             label="查获中队"
             prop="discoverDept"
             align="center">
@@ -94,7 +94,7 @@
             width="150"
             prop="discoverTime"
             align="center">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             label="柜号"
             prop="doorNo"
