@@ -163,16 +163,16 @@
                   <div style="position:absolute;width:0;height:0;border-bottom:60px solid #FD3C5F; border-left:60px solid #fff;bottom:0;right:0;"></div>
                   <i class="el-icon-s-custom" style="position:absolute;color:#fff;font-size:40px;bottom:0;right:0"></i>
                 </div>
-                <div  @click="changepower(0)">
+                <div  @click="changepower(3)">
                   <div style="height:20%;line-height:20%;padding:0">
-                    <div class="cabinet_text" >生物检材柜</div>
-                    <div class="cabinet_text" style="text-align:center;color:blue;width:20%;"><i v-show="power.swjcg" class="el-icon-check"></i></div>
+                    <div class="cabinet_text" >随身物品柜</div>
+                    <div class="cabinet_text" style="text-align:center;color:blue;width:20%;"><i v-show="power.sswpg" class="el-icon-check"></i></div>
                   </div>
                   <div style="height:50%;width:40%;margin:0% 30%;">
                     <img style="height:100%;width:100%;" src="../assets/public_img/冰箱.png" alt="">
                   </div>
                 </div>
-                <div  @click="changepower(1)">
+                <!-- <div  @click="changepower(1)">
                   <div style="height:20%;line-height:20%;padding:0">
                     <div class="cabinet_text" >案卷柜</div>
                     <div class="cabinet_text" style="text-align:center;color:blue;width:20%;"><i v-show="power.ajg" class="el-icon-check"></i></div>
@@ -180,7 +180,7 @@
                   <div style="height:50%;width:40%;margin:0% 30%;">
                     <img style="height:100%;width:100%;" src="../assets/public_img/柜子 (1).png" alt="">
                   </div>
-                </div>
+                </div> -->
                 <div  @click="changepower(2)">
                   <div style="height:20%;line-height:20%;padding:0">
                     <div class="cabinet_text" >涉案财物柜</div>
@@ -237,7 +237,7 @@ export default {
           },
           power:{
             system:false,
-            swjcg:false,
+            sswpg:false,
             ajg:false,
             sacwg:false,
           },
@@ -313,15 +313,15 @@ export default {
         if(num===-1){
          this.power.system = !this.power.system;
          if(this.power.system){ //系统权限
-           this.power.swjcg=true;
+           this.power.sswpg=true;
            this.power.ajg=true;
            this.power.sacwg=true;
          }
-        }else if(num===0){ //生物检材柜权限
+        }else if(num===3){ //生物检材柜权限
            if(this.power.system){
-           this.power.swjcg=true;
+           this.power.sswpg=true;
          }else{
-           this.power.swjcg=!this.power.swjcg;
+           this.power.sswpg=!this.power.sswpg;
          }
         }else if(num===1){ //案卷柜权限
            if(this.power.system){
@@ -609,9 +609,9 @@ export default {
                       permitType:-1
                     })
                   }
-                  if(this.power.swjcg){
+                  if(this.power.sswpg){
                     this.editObj2.permits.push({
-                      permitType:0
+                      permitType:3
                     })
                   }
                   if(this.power.ajg){
@@ -648,7 +648,7 @@ export default {
             }
             if(this.power.swjcg){
               this.ruleForm.permits.push({
-                permitType:0
+                permitType:3
               })
             }
             if(this.power.ajg){
