@@ -172,7 +172,7 @@
                     <img style="height:100%;width:100%;" src="../assets/public_img/冰箱.png" alt="">
                   </div>
                 </div>
-                <!-- <div  @click="changepower(1)">
+                <div  @click="changepower(1)">
                   <div style="height:20%;line-height:20%;padding:0">
                     <div class="cabinet_text" >案卷柜</div>
                     <div class="cabinet_text" style="text-align:center;color:blue;width:20%;"><i v-show="power.ajg" class="el-icon-check"></i></div>
@@ -180,7 +180,7 @@
                   <div style="height:50%;width:40%;margin:0% 30%;">
                     <img style="height:100%;width:100%;" src="../assets/public_img/柜子 (1).png" alt="">
                   </div>
-                </div> -->
+                </div>
                 <div  @click="changepower(2)">
                   <div style="height:20%;line-height:20%;padding:0">
                     <div class="cabinet_text" >涉案财物柜</div>
