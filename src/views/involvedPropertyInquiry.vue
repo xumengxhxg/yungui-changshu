@@ -234,6 +234,7 @@ export default {
     // 点击表格行
     rowClick(val) {
       this.selectRow = val
+      console.log(this.selectRow, 99)
       this.getProperty(val)
     },
     // 获取涉案财物列表
@@ -253,11 +254,13 @@ export default {
     // 登记
     toDetail(row) {
       let newRow = {}
-      if (this.selectRow.accidentNo) {
+      if (this.selectRow.id) {
         newRow = Object.assign(row, this.selectRow)
       } else {
         newRow = Object.assign(row, this.tableData[0])
       }
+      // newRow = Object.assign(row, this.selectRow)
+      console.log(newRow, 7777)
         this.$router.push({
           name: 'searchPropertyDetail',
           query: JSON.stringify(newRow)

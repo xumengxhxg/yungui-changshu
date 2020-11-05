@@ -2,7 +2,7 @@
 <template>
   <div class="detail">
     <div class="text-left ph20 pv10">
-      物品查询
+      涉案财物查询
      <span class="cursor" @click="$router.go(-1)">
         <i class="el-icon-back"></i>
         <span>返回</span>
@@ -18,7 +18,7 @@
             <span slot="label"><i class="el-icon-date"></i> 详情</span>
             <div class="p20" style="border-top: 1px solid #ededed">
               <table border="1" cellspacing="0" style="margin: 0 auto">
-                <tr>
+                <!-- <tr>
                   <td>人员姓名：</td>
                   <td>{{info.suspectName}}</td>
                   <td>身份证：</td>
@@ -45,6 +45,18 @@
                 <tr>
                   <td>查处时间：</td>
                   <td colspan="3">{{info.discoverTime}}</td>
+                </tr> -->
+                <tr>
+                  <td>案件名称：</td>
+                  <td>{{info.caseName}}</td>
+                  <td>案件编号：</td>
+                  <td>{{info.caseNo}}</td>
+                </tr>
+                <tr>
+                  <td>主办人：</td>
+                  <td>{{info.sponsor}}</td>
+                  <td>协办人：</td>
+                  <td>{{info.cosponsor}}</td>
                 </tr>
                  <tr>
                   <td>物品编号：</td>
@@ -125,7 +137,9 @@ export default {
     }
   },
   created() {
+
     this.info = JSON.parse(this.$route.query)
+    console.log(this.info, 987)
     this.circulationList()
     this.getPropertyDetail()
   },
@@ -143,7 +157,7 @@ export default {
     },
     circulationList() {
       let params = {
-        eventNo: this.info.accidentNo,
+        eventNo: this.info.caseNo,
         itemNo: this.info.itemNo,
         cabinetType: 2
       }

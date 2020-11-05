@@ -150,8 +150,8 @@
 </template>
 
 <script>
-import { getCaseList, achieveBarcode2 } from '@/api/cabinet'
-import { formatDate, download } from '@/utils/global'
+import { getCaseList2, achieveBarcode2 } from '@/api/cabinet'
+import { download } from '@/utils/global'
 export default {
   data () {
     return {
@@ -191,9 +191,10 @@ export default {
         // endTime: endTime,
         caseName: this.form.caseName,
         // doorNo: this.form.doorNo,
-        storeStatus: 1
+        storeStatus: 1,
+        cabinetType: 1
       }
-      getCaseList(data).then((res) => {
+      getCaseList2(data).then((res) => {
         if (res.result) {
           this.tableData = res.rows
           this.total = res.total

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-left ph20 pv10">
-      案卷柜管理/检材柜
+      案卷柜管理/案卷柜
     </div>
     <div class="bg-white p20">
       <div class="title">

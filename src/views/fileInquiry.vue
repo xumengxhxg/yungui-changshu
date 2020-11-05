@@ -107,14 +107,14 @@
             width="150"
             prop="caseTime"
             align="center">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             label="状态"
             align="center">
             <template slot-scope="scope">
               {{scope.row.storeStatus == 0 ? '待存' : scope.row.storeStatus == 1 ? '已存' : '取出'}}
             </template>
-          </el-table-column> -->
+          </el-table-column>
           <el-table-column
             label="操作"
             align="center">

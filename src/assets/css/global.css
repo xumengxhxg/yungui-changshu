@@ -247,16 +247,16 @@ p {
   text-align: center;
   font-weight: 600;
 }
-.property-item .el-upload--picture-card{
+.el-upload--picture-card{
   width: 100px !important;
   height: 100px !important;
 }
-.property-item .el-upload-list--picture-card .el-upload-list__item {
+.el-upload-list--picture-card .el-upload-list__item {
   width: 100px;
   height: 100px;
   position: absolute;
-  left: 10px;
-  top: 10px;
+  /* left: 10px;
+  top: 10px; */
   z-index: 100;
 }
 .register .el-upload--picture-card{

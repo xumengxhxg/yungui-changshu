@@ -2,43 +2,47 @@
 <!-- 新增编辑执行单位 -->
 <template>
   <div>
-    <el-dialog title="随身物品柜" :visible.sync="isShow">
+    <el-dialog title="随身物品柜" width='70%' :visible.sync="isShow">
       <div>
-        <div class="title">
+        <!-- <div class="title">
           <img src="@/assets/images/police.jpg" alt="">
           <span class="text">随身物品柜</span>
-        </div>
-        <div class="mt20">
-          <div class="clearfix" style="margin: 0 auto; width: 90%; margin-top: 40px; border: 1px solid #cecece;padding: 5px">
+        </div> -->
+        <div class="">
+          <div class="clearfix" style="margin: 0 auto; width: 100%; border: 1px solid #cecece;padding: 5px; font-size: 12px">
             <div class="pull-left" style="width: 25%">
               <div :class="index == 1 || index == 2 ||index == 3 || index == 4 || index == 5 || index == 6 ? 'cabinet-4' : 'cabinet'" class="cursor" v-for="(item, index) in cabinetNewList.slice(0, 10)" :key="item.doorNo" @click="select(item.doorNo)">
-                <div>
+                <div :class="item.usedSpace || item.inExistence ? 'warning' : 'default'">
                   {{item.doorNo}}
-                  <!-- <div>已用：{{item.usedSpace}} </div> -->
+                  <div>已用：{{item.usedSpace}} </div>
+                  <div>已登记：{{item.inExistence}} </div>
                 </div>
               </div>
             </div>
             <div class="pull-left" style="width: 25%">
-              <div :class="index == 1 || index == 2 ||index == 3 || index == 4 || index == 5 || index == 6? 'cabinet-4' : 'cabinet'" class="cursor" v-for="(item, index) in cabinetNewList.slice(10, 20)" :key="item.doorNo" @click="select(item.doorNo)">
-                <div>
+              <div :class="index == 1 || index == 2 ||index == 3 || index == 4 || index == 5 || index == 6? 'cabinet-4' : 'cabinet'" class="cursor" v-for="(item, index) in cabinetNewList.slice(10, 20)" :key="item.doorNo" @click="select(item.doorNo)"  >
+                <div :class="item.usedSpace || item.inExistence ? 'warning' : 'default'">
                   {{item.doorNo}}
-                  <!-- <div>已用：{{item.usedSpace}} </div> -->
+                  <div>已用：{{item.usedSpace}} </div>
+                  <div>已登记：{{item.inExistence}} </div>
                 </div>
               </div>
             </div>
             <div class="pull-left" style="width: 25%">
-              <div :class="index == 1 || index == 2 ||index == 3 || index == 4 || index == 5 ? 'cabinet-2' :  index == 6 ||index == 7 || index == 8 ? 'cabinet-4' : index == 9  ? 'cabinet-5' : 'cabinet'" class="cursor" v-for="(item, index) in cabinetNewList.slice(20, 30)" :key="item.doorNo" @click="select(item.doorNo)">
-                <div>
+              <div :class="index == 1 || index == 2 ||index == 3 || index == 4 || index == 5 ? 'cabinet-2' :  index == 6 ||index == 7 || index == 8 ? 'cabinet-4' : index == 9  ? 'cabinet-5' : 'cabinet'" class="cursor" v-for="(item, index) in cabinetNewList.slice(20, 30)" :key="item.doorNo" @click="select(item.doorNo)" >
+                <div :class="item.usedSpace || item.inExistence ? 'warning' : 'default'">
                   {{item.doorNo}}
-                  <!-- <div>已用：{{item.usedSpace}} </div> -->
+                  <div>已用：{{item.usedSpace}} </div>
+                  <div>已登记：{{item.inExistence}} </div>
                 </div>
               </div>
             </div>
             <div class="pull-left" style="width: 25%">
-              <div :class="index == 1 || index == 2 ||index == 3 || index == 4 || index == 5 ? 'cabinet-3' :  index == 6 ||index == 7 || index == 8 ? 'cabinet-4' : index == 9  ? 'cabinet-5' : 'cabinet'" class="cursor" v-for="(item, index) in cabinetNewList.slice(30, 40)" :key="item.doorNo" @click="select(item.doorNo)">
-                <div>
+              <div :class="index == 1 || index == 2 ||index == 3 || index == 4 || index == 5 ? 'cabinet-3' :  index == 6 ||index == 7 || index == 8 ? 'cabinet-4' : index == 9  ? 'cabinet-5' : 'cabinet'" class="cursor" v-for="(item, index) in cabinetNewList.slice(30, 40)" :key="item.doorNo" @click="select(item.doorNo)" >
+               <div :class="item.usedSpace || item.inExistence ? 'warning' : 'default'">
                   {{item.doorNo}}
-                  <!-- <div>已用：{{item.usedSpace}} </div> -->
+                  <div>已用：{{item.usedSpace}} </div>
+                  <div>已登记：{{item.inExistence}} </div>
                 </div>
               </div>
             </div>
@@ -53,7 +57,7 @@
 </template>
 
 <script>
-import { getCounterInfo } from '@/api/cabinet'
+import { getCounterInfo, getStoreName } from '@/api/cabinet'
 export default {
   name: 'selectCabinet',
   props: {
@@ -73,8 +77,39 @@ export default {
   },
   created() {
     this.getCounterInfo()
+    this.getStoreName()
   },
   methods: {
+    getStoreName() {
+      let params = {
+        cabinetType: 3
+      }
+      getStoreName(params).then((res) => {
+        this.cabinetList.forEach((item) => {
+          // this.sum = res.data.capacity
+          // item.surplusSpace = res.data.capacity // 未使用
+          item.usedSpace = 0 //已使用
+          item.inExistence = 0 //已登记
+          if (res.data) {
+            res.data.forEach((doorItem) => {
+              if (item.doorNo == doorItem.doorNo) {
+                // item.surplusSpace = doorItem.surplusSpace
+                item.usedSpace = doorItem.storedCount
+                item.inExistence = doorItem.toBeStoredCount
+              } else {
+                // item.surplusSpace = res.data.capacity // 未使用
+                // item.usedSpace = 0 //已使用
+              }
+            })
+          } else {
+            // item.surplusSpace = res.data.capacity // 未使用
+            item.usedSpace = 0 //已使用
+            item.inExistence = 0
+          }
+        })
+        this.cabinetNewList = this.cabinetList
+      }).catch()
+    },
     // 获取柜面信息
     getCounterInfo() {
       let params = {
@@ -150,10 +185,10 @@ export default {
 }
 .cabinet {
   width: 100%; 
-  height: 120px;
+  height: 160px;
   padding: 5px;
   box-sizing: border-box;
-  >div {
+  >div.default {
     background: rgb(236, 248, 255);
     width: 100%;
     height: 100%;
@@ -161,16 +196,25 @@ export default {
     padding: 10px;
     box-sizing: border-box;
   }
-  div:hover {
+  >div.warning {
+    background: #fd7878; 
+    color: white;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #cecece;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  >div:hover {
     background: #bbe5fe;
   }
 }
 .cabinet-2 {
   width: 50%; 
-  height: 60px;
+  height: 80px;
   padding: 5px;
   box-sizing: border-box;
-  >div {
+  >div.default {
     background: rgb(236, 248, 255);
     width: 100%;
     height: 100%;
@@ -178,16 +222,25 @@ export default {
     padding: 10px;
     box-sizing: border-box;
   }
-  div:hover {
+   >div.warning {
+    background: #fd7878; 
+    color: white;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #cecece;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  >div:hover {
     background: #bbe5fe;
   }
 }
 .cabinet-3 {
   width: 100%; 
-  height: 60px;
+  height: 80px;
   padding: 5px;
   box-sizing: border-box;
-  >div {
+  >div.default {
     background: rgb(236, 248, 255);
     width: 50%;
     height: 100%;
@@ -196,16 +249,26 @@ export default {
     padding: 10px;
     box-sizing: border-box;
   }
-  div:hover {
+  >div.warning {
+    background: #fd7878; 
+    color: white;
+    width: 50%;
+    height: 100%;
+    border: 1px solid #cecece;
+    float: right;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  >div:hover {
     background: #bbe5fe;
   }
 }
 .cabinet-4 {
   width: 100%; 
-  height: 60px;
+  height: 80px;
   padding: 5px;
   box-sizing: border-box;
-  >div {
+  >div.default {
     background: rgb(236, 248, 255);
     width: 100%;
     height: 100%;
@@ -213,16 +276,25 @@ export default {
     padding: 10px;
     box-sizing: border-box;
   }
-  div:hover {
+  >div.warning {
+    background: #fd7878; 
+    color: white;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #cecece;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  >div:hover {
     background: #bbe5fe;
   }
 }
 .cabinet-5 {
   width: 100%; 
-  height: 240px;
+  height: 320px;
   padding: 5px;
   box-sizing: border-box;
-  >div {
+  >div.default {
     background: rgb(236, 248, 255);
     width: 100%;
     height: 100%;
@@ -230,17 +302,26 @@ export default {
     padding: 10px;
     box-sizing: border-box;
   }
-  div:hover {
+  >div.warning {
+    background: #fd7878; 
+    color: white;
+    width: 100%;
+    height: 100%;
+    border: 1px solid #cecece;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  >div:hover {
     background: #bbe5fe;
   }
 }
 .screen {
   width: 25%;
-  height: 290px;
+  height: 390px;
   padding: 0px 10px;
   position: relative;
   left: 62%;
-  top: 125px;
+  top: 165px;
   box-sizing: border-box;
   div {
     width: 100%;

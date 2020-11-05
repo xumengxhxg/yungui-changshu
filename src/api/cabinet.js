@@ -27,7 +27,13 @@ export function getCaseList(data) {
       data: data
   })
 }
-
+export function getCaseList2(data) {
+  return request({
+      url: '/cloudcabinet/inventoryInfo/getCaseList',
+      method: 'post',
+      data: data
+  })
+}
 // 登记
 export function checkIn(data) {
   return request({
@@ -267,11 +273,12 @@ export function getTemperature() {
 }
 
 // 
-export function getPersonalItemList(data) {
+export function getPersonalItemList(data, params) {
   return request({
       url: '/cloudcabinet/inventoryInfo/getPersonalItemList',
       method: 'post',
-      data: data
+      data: data,
+      params: params
   })
 }
 
@@ -312,5 +319,13 @@ export function addPersonalItem(data) {
       url: '/cloudcabinet/inventoryInfo/addPersonalItem',
       method: 'post',
       data: data
+  })
+}
+
+export function getStoreName(params) {
+  return request({
+      url: '/cloudcabinet/inventoryInfo/getStoreName',
+      method: 'get',
+      params: params
   })
 }

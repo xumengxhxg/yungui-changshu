@@ -2,7 +2,7 @@
 <template>
   <div class="detail">
     <div class="text-left ph20 pv10">
-      物品查询
+      案卷查询
       <span class="cursor" @click="$router.go(-1)">
         <i class="el-icon-back"></i>
         <span>返回</span>
@@ -24,35 +24,37 @@
                   <td>案件名称：</td>
                   <td>{{info.caseName}}</td>
                 </tr>
-                <tr>
+                <!-- <tr>
                   <td>案件类型：</td>
                   <td>{{info.caseType ? '危险驾驶' : '交通肇事'}}</td>
                   <td>嫌疑人：</td>
                   <td>{{info.suspectName}}</td>
-                </tr>
-                <tr>
+                </tr> -->
+                <!-- <tr>
                   <td>案件状态：</td>
                   <td>{{info.caseStatus == 0 ? '立案' : info.caseStatus == 1 ? '破案' : info.caseStatus == 2 ? '结案' : '暂无'}}</td>
                   <td>驾驶证状态：</td>
                   <td v-if="info.licenseStatus == 0">未吊销</td>
                   <td v-else-if="info.licenseStatus == 1">吊销</td>
                   <td v-else>无驾驶证</td>
-                </tr>
+                </tr> -->
                 <tr>
                   <td>主办人：</td>
                   <td>{{info.sponsor}}</td>
-                  <td>立案时间：</td>
+                  <td>协办人：</td>
+                  <td>{{info.cosponsor}}</td>
+                  <!-- <td>立案时间：</td>
                   <td v-if="info.caseTime != '1900-01-01 00:00:00'">{{info.caseTime ? info.caseTime.slice(0, 10) : ''}}</td>
-                  <td v-else></td>
+                  <td v-else></td> -->
                 </tr>
-                <tr>
+                <!-- <tr>
                   <td>破案时间：</td>
                   <td v-if="info.solveTime != '1900-01-01 00:00:00'">{{info.solveTime ? info.solveTime.slice(0, 10) : ''}}</td>
                   <td v-else></td>
                   <td>结束时间：</td>
                   <td v-if="info.finishTime != '1900-01-01 00:00:00'">{{info.finishTime ? info.finishTime.slice(0, 10) : ''}}</td>
                   <td v-else></td>
-                </tr>
+                </tr> -->
               </table>
             </div>
           </el-tab-pane>

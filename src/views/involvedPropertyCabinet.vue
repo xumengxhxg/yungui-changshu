@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="text-left ph20 pv10">
-      涉案财务柜管理/检材柜
+      涉案财务柜管理/涉案财物柜
     </div>
     <div class="bg-white p20">
       <div class="title">

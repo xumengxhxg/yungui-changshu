@@ -1,9 +1,8 @@
 <!--  -->
-<!--  -->
 <template>
   <div>
     <div class="text-left ph20 pv10">
-      随身物品柜管理
+      随身物品柜管理/登记日志
     </div>
     <div class="bg-white">
       <!-- 查询 -->

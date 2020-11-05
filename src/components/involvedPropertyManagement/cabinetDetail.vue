@@ -3,7 +3,7 @@
   <div>
     <div class="detail">
       <div class="text-left ph20 pv10">
-        检材柜
+        涉案财物柜
         <span class="cursor" @click="$router.go(-1)">
           <i class="el-icon-back"></i>
           <span>返回</span>

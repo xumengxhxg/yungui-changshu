@@ -74,18 +74,30 @@
           </el-table-column>
           <el-table-column
             label="存入时间"
-            prop="storeTime"
             align="center">
             <template slot-scope="scope">
               {{scope.row.storeTime == '1900-01-01 00:00:00' ? '-' : scope.row.storeTime}}
             </template>
           </el-table-column>
-          <el-table-column
-            label="取出时间"
-            prop="fetchTime"
+           <el-table-column
+            label="存入照片"
             align="center">
             <template slot-scope="scope">
-              {{scope.row.storeTime == '1900-01-01 00:00:00' ? '-' : scope.row.fetchTime}}
+              <el-button type="text" @click="showPicture(scope.row.storePicture)">存入照片</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="取出时间"
+            align="center">
+            <template slot-scope="scope">
+              {{scope.row.fetchTime == '1900-01-01 00:00:00' ? '-' : scope.row.fetchTime}}
+            </template>
+          </el-table-column>
+           <el-table-column
+            label="取出照片"
+            align="center">
+            <template slot-scope="scope">
+              <el-button type="text" @click="showPicture(scope.row.fetchPicture)">取出照片</el-button>
             </template>
           </el-table-column>
            <el-table-column
@@ -97,7 +109,7 @@
             label="物品状态"
             align="center">
             <template slot-scope="scope">
-              {{scope.row.storeStatus == 0 ? '待存' : scope.row.storeStatus == 1 ? '已出' : scope.row.storeStatus == 2 ? '取出' : ''}}
+              {{scope.row.storeStatus == 0 ? '待存' : scope.row.storeStatus == 1 ? '已存' : scope.row.storeStatus == 2 ? '取出' : ''}}
             </template>
           </el-table-column>
           <el-table-column
@@ -106,6 +118,7 @@
             <template slot-scope="scope">
               <el-button type="text" @click="editSuspect(scope.row)">编辑</el-button>
               <el-button v-if="scope.row.storeStatus != 1" type="text" @click="remove(scope.row.id)">删除</el-button>
+              <el-button v-if="scope.row.storeStatus == 2" type="text" @click="outPicture(scope.row)">取物上传</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -178,6 +191,51 @@
         <el-button type="primary" @click="saveEditSuspect">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 图片上传 -->
+     <el-dialog
+      title="照片"
+      :visible.sync="pictureDialogVisible"
+      width="30%">
+      <img :src="picture" alt="" style="width: 100%">
+    </el-dialog>
+    <!-- 取出图片 -->
+    <el-dialog
+      title="取出照片"
+      :visible.sync="outPictureDialogVisible"
+      width="30%">
+       <el-form  label-width="100px">
+        <el-form-item label="图片上传：" >
+          <!-- <el-upload
+            class="pull-left ph20"
+            action="#"
+            :file-list='pictureUpload'
+            list-type="picture-card"
+            :auto-upload="false"
+            :on-success="handleSuccess"
+            :on-change="changeImg" >
+              <i slot="default" class="el-icon-plus" style="position: relative; top: -20px"></i>
+          </el-upload> -->
+          <el-upload
+            list-type="picture-card"
+            ref="permitUpload"
+            :headers='header'
+            :action="imageUploadUrl"
+            :file-list='pictureUpload'
+            :disabled="isUploading"
+            :on-progress="handleUploadProgress"
+            :on-success="handleSuccess"
+            :before-upload="beforeFileUpload"
+            :on-remove="handleRemove"
+          >
+          <i slot="default" class="el-icon-plus" style="position: relative; top: -20px"></i>
+          </el-upload>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="outCancel">取 消</el-button>
+        <el-button type="primary" @click="outSave">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -187,6 +245,7 @@ import { formatDate } from '@/utils/global'
 export default {
   data () {
     return {
+    header: {},
      form: {
       name: '',
       idCard: '',
@@ -199,19 +258,118 @@ export default {
      total: 0,
      listDialogVisible: false,
      suspectDialogVisible: false,
+     pictureDialogVisible: false,
+     outPictureDialogVisible: false,
      effectsList: [],
      suspectInfo: {
         name: '',
         idCard: ''
       },
-     options: [{label: '待存', value: 0},{label: '已存', value: 1}, {label: '取出', value: 2}]
+     options: [{label: '待存', value: 0},{label: '已存', value: 1}, {label: '取出', value: 2}],
+     pictureUpload: [],
+     imageUploadUrl: process.env.VUE_APP_BASE_API + '/cloudcabinet/common/upload',
+      isUploading: false,
+      picture: '',
+      obj: {}
     }
   },
   created() {
+    this.header.Authorization = localStorage.getItem('token')
     // this.getCaseList()
     this.getPersonalItemList()
   },
   methods: {
+    outCancel() {
+      this.outPictureDialogVisible = false
+    },
+    outSave() {
+      let data = {
+        cabinetType: 3,
+        id: this.obj.id,
+        fetchPicture: this.pictureUpload[0].url
+      }
+      updateSuspect(data).then(() => {
+        this.$message({
+          type: 'success',
+          message: '取出成功!'
+        })
+        this.getPersonalItemList()
+        this.outPictureDialogVisible = false
+      }).catch()
+    },
+    handleUploadProgress(event, file, fileList) {
+      this.isUploading = true
+    },
+    handleSuccess(response, file, fileList) {
+      this.isUploading = false
+      let obj = {
+        name: file.name,
+        url: response.url,
+        fileName: response.fileName
+      }
+      // 编辑财物时修改图片上传
+      if (!this.isShowEditBtn && !this.isAddProperty) {
+        this.pictureUpload = [obj]
+        // this.currentEditProperty.storePicture = response.url
+      }
+    },
+    beforeFileUpload(file) {
+      console.log(file)
+      
+      const fileSize = file.size
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
+      if (fileSize >= 10485760) {
+        this.$message.error('上传的文件不能超过10M')
+        return false
+      }
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+        return false
+      }
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        this.imgStream = reader.result
+      }
+    },
+    handleRemove(file, fileList) {
+      // this.isUploading = false
+      // this.propertyItem.fileList = []
+    },
+    // 图片内容转base64
+    getBase64(file) {
+      return new Promise(function(resolve, reject) {
+        let reader = new FileReader()
+        let imgResult = ""
+        reader.readAsDataURL(file)
+        reader.onload = function() {
+          imgResult = reader.result
+        }
+        reader.onerror = function(error) {
+          reject(error)
+        }
+        reader.onloadend = function() {
+          resolve(imgResult)
+        }
+      })
+    },
+    outPicture(row) {
+      this.obj = {
+        cabinetType: 3,
+        id: row.id
+      }
+      this.pictureUpload = []
+      this.outPictureDialogVisible = true
+    },
+    changeImg(file) {
+      this.getBase64(file.raw).then(res => {
+        this.pictureUpload = [{url: res}]
+      })
+    },
+    showPicture(val) {
+      this.picture = val
+      this.pictureDialogVisible = true
+    },
     remove(id) {
       this.$confirm('是否确认删除?', '提示', {
         confirmButtonText: '确定',
@@ -293,7 +451,11 @@ export default {
         storeStatus: this.form.status
         // itemStatus: 0
       }
-      getPersonalItemList(data).then((res) => {
+      let params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
+      }
+      getPersonalItemList(data, params).then((res) => {
         if (res.result) {
           this.tableData = res.rows
           this.total = res.total

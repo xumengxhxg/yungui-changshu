@@ -2,7 +2,7 @@
 <template>
   <div>
     <div class="text-left ph20 pv10">
-      生物检材柜管理/入库管理
+      随身物品柜管理/入库登记
     </div>
     <div class="bg-white top-container p20" >
       <div style="border:1px solid rgb(64, 158, 255); width: 100%">
@@ -41,6 +41,35 @@
               </template>
             </el-table-column>
           </el-table>
+          <div class="mt20 clearfix">
+            <div class="pull-left">图片上传：</div>
+            <div>
+              <!-- <el-upload
+                class="pull-left ph20"
+                action="#"
+                :file-list='pictureUpload'
+                list-type="picture-card"
+                :auto-upload="false"
+                :on-success="handleSuccess"
+                :on-change="reChangeImg" >
+                  <i slot="default" class="el-icon-plus" style="position: relative; top: -20px"></i>
+              </el-upload> -->
+                <el-upload
+                  list-type="picture-card"
+                  ref="permitUpload"
+                  :headers='header'
+                  :action="imageUploadUrl"
+                  :file-list='pictureUpload'
+                  :disabled="isUploading"
+                  :on-progress="handleUploadProgress"
+                  :on-success="handleSuccess"
+                  :before-upload="beforeFileUpload"
+                  :on-remove="handleRemove"
+                >
+                <i slot="default" class="el-icon-plus" style="position: relative; top: -20px"></i>
+                </el-upload>
+            </div>
+          </div>
           <div class="mt20">
             <el-input placeholder="点击选择柜门" v-model="selectDoorNo" style="width: 500px;" @focus="selectCabinet">
               <template slot="prepend">分配柜门</template>
@@ -55,41 +84,62 @@
     <div class="bg-white p20">
       <!-- 待存列表 -->
       <div style="text-align: center">待存列表</div>
-      <el-table
-        :data="storelist"
-        style="width: 80%; margin: 0 auto">
-        <el-table-column
-          prop="suspectName"
-          label="嫌疑人"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          prop="identityCard"
-          label="身份证"
-          width="180">
-        </el-table-column>
-        <el-table-column
-          label="柜号"
-          prop="doorNo"
-          align="center">
-        </el-table-column>
-        <el-table-column
-          label="随身物品">
-          <template slot-scope="scope">
-            <el-button type="text" @click="effectsManagementFn(scope.row.id)">物品列表管理</el-button>
-          </template>
-        </el-table-column>
-        <el-table-column
-          label="操作"
-          width='200'>
-          <template slot-scope="scope">
-            <el-button type="text" @click="addEffects(1, scope.row.id)">新增随身物品</el-button>
-            <el-button type="text" @click="editSuspect(scope.row)">编辑</el-button>
-            <el-button type="text" @click="deleteSuspect(scope.row.id)">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
+      <div style="width: 80%; margin: 0 auto">
+        <el-table
+          :data="storelist">
+          <el-table-column
+            prop="suspectName"
+            label="嫌疑人"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            prop="identityCard"
+            label="身份证"
+            width="180">
+          </el-table-column>
+          <el-table-column
+            label="柜号"
+            prop="doorNo"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            label="存入图片">
+            <template slot-scope="scope">
+              <el-button type="text" @click="outPicture(scope.row.storePicture)" >存入照片</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="随身物品">
+            <template slot-scope="scope">
+              <el-button type="text" @click="effectsManagementFn(scope.row.id)">物品列表管理</el-button>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="操作"
+            width='200'>
+            <template slot-scope="scope">
+              <el-button type="text" @click="addEffects(1, scope.row.id)">新增随身物品</el-button>
+              <el-button type="text" @click="editSuspect(scope.row)">编辑</el-button>
+              <el-button type="text" @click="deleteSuspect(scope.row.id)">删除</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <div class="clearfix pt20">
+          <el-pagination
+            class="pull-right"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page="pageNum"
+            :page-sizes="[5, 10]"
+            :page-size="pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="total">
+          </el-pagination>
+        </div>
+      </div>
+      
     </div>
+    
     <!-- 物品新增编辑 -->
      <el-dialog
       :title="title"
@@ -151,11 +201,44 @@
         <el-form-item label="嫌疑人身份证：" >
           <el-input v-model="suspectInfo.idCard" autocomplete="off" size="small"></el-input>
         </el-form-item>
+        <el-form-item label="图片上传：" >
+          <!-- <el-upload
+            class="pull-left ph20"
+            action="#"
+            :file-list='suspectInfo.pictureUpload'
+            list-type="picture-card"
+            :auto-upload="false"
+            :on-success="handleSuccess"
+            :on-change="changeImg" >
+              <i slot="default" class="el-icon-plus" style="position: relative; top: -20px"></i>
+          </el-upload> -->
+          <el-upload
+            list-type="picture-card"
+            ref="permitUpload"
+            :headers='header'
+            :action="imageUploadUrl"
+            :file-list='suspectInfo.pictureUpload'
+            :disabled="isUploading"
+            :on-progress="handleUploadProgress"
+            :on-success="handleSuccess2"
+            :before-upload="beforeFileUpload"
+            :on-remove="handleRemove"
+          >
+          <i slot="default" class="el-icon-plus" style="position: relative; top: -20px"></i>
+          </el-upload>
+        </el-form-item>
       </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="cancelEditSuspect">取 消</el-button>
         <el-button type="primary" @click="saveEditSuspect">确 定</el-button>
       </span>
+    </el-dialog>
+    <!-- 图片 -->
+     <el-dialog
+      title="照片"
+      :visible.sync="pictureDialogVisible"
+      width="30%">
+      <img :src="picture" alt="" style="width: 100%">
     </el-dialog>
     <div v-if="selectCabinetDialogVisible">
       <select-cabinet :dialogVisible='selectCabinetDialogVisible' @update='updateCabinetDialogVisible' @selectCabinet='selectDoor'></select-cabinet>
@@ -172,6 +255,7 @@ export default {
   },
   data () {
     return {
+      header: {},
       title: '',
       suspect: '',
       idCard: '',
@@ -180,13 +264,15 @@ export default {
       dialogVisible: false,
       listDialogVisible: false,
       suspectDialogVisible: false,
+      pictureDialogVisible: false,
       effectsInfo: {
         name: '',
         num: 0
       },
       suspectInfo: {
         name: '',
-        idCard: ''
+        idCard: '',
+        pictureUpload: []
       },
       currentIndex: '',
       selectCabinetDialogVisible: false,
@@ -194,18 +280,109 @@ export default {
       effectsList: [{name: 'hhh'}],
       addEffectType: 0,
       pageNum: 1,
-      pageSize: 10,
+      pageSize: 5,
       total: 0,
       currentId: '',
       currentId2: '',
-      currentId3: ''
+      currentId3: '',
+      pictureUpload: [],
+      imageUploadUrl: process.env.VUE_APP_BASE_API + '/cloudcabinet/common/upload',
+      isUploading: false,
+      picture: ''
     }
   },
   created() {
+    this.header.Authorization = localStorage.getItem('token')
     // this.toBeStoredList()
     this.getPersonalItemList()
   },
   methods: {
+    handleUploadProgress(event, file, fileList) {
+      this.isUploading = true
+    },
+    handleSuccess(response, file, fileList) {
+      this.isUploading = false
+      let obj = {
+        name: file.name,
+        url: response.url,
+        fileName: response.fileName
+      }
+      // 编辑财物时修改图片上传
+      if (!this.isShowEditBtn && !this.isAddProperty) {
+        this.pictureUpload = [obj]
+        // this.currentEditProperty.storePicture = response.url
+      }
+    },
+    handleSuccess2(response, file, fileList) {
+      this.isUploading = false
+      let obj = {
+        name: file.name,
+        url: response.url,
+        fileName: response.fileName
+      }
+      // 编辑财物时修改图片上传
+      if (!this.isShowEditBtn && !this.isAddProperty) {
+        this.suspectInfo.pictureUpload = [obj]
+        // this.currentEditProperty.storePicture = response.url
+      }
+    },
+    beforeFileUpload(file) {
+      console.log(file)
+      
+      const fileSize = file.size
+      const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
+      if (fileSize >= 10485760) {
+        this.$message.error('上传的文件不能超过10M')
+        return false
+      }
+      if (!isJPG) {
+        this.$message.error('上传头像图片只能是 JPG 格式!')
+        return false
+      }
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        this.imgStream = reader.result
+      }
+    },
+    handleRemove(file, fileList) {
+      // this.isUploading = false
+      // this.propertyItem.fileList = []
+    },
+
+    outPicture(val) {
+      this.picture = val
+      this.pictureDialogVisible = true
+    },
+    changeImg(file) {
+      this.getBase64(file.raw).then(res => {
+        console.log(res, 888)
+        this.suspectInfo.pictureUpload = [{url: res}]
+      })
+    },
+    reChangeImg(file) {
+      this.getBase64(file.raw).then(res => {
+        console.log(res, 888)
+        this.pictureUpload = [{url: res}]
+      })
+    },
+    // 图片内容转base64
+    getBase64(file) {
+      return new Promise(function(resolve, reject) {
+        let reader = new FileReader()
+        let imgResult = ""
+        reader.readAsDataURL(file)
+        reader.onload = function() {
+          imgResult = reader.result
+        }
+        reader.onerror = function(error) {
+          reject(error)
+        }
+        reader.onloadend = function() {
+          resolve(imgResult)
+        }
+      })
+    },
     // 待存列表
     getPersonalItemList() {
       let data = {
@@ -346,7 +523,8 @@ export default {
               eventNo: this.idCard,
               name: this.suspect,
               doorNo: this.selectDoorNo,
-              inventoryAttacheDTOs: this.tableData
+              inventoryAttacheDTOs: this.tableData,
+              storePicture: this.pictureUpload[0].url
             }
             checkIn(data).then((res) => {
               if (res.result) {
@@ -368,20 +546,20 @@ export default {
         }
       }).then()
     },
-    toBeStoredList() {
-      let params = {
-        pageNum: this.pageNum,
-        pageSize: this.pageSize,
-        cabinetType: 3,
-        storeStatus: 0 // 0待存，1已存，2取出，3部分在存
-      }
-      toBeStoredList(params).then((res) => {
-        if (res.result) {
-          this.storeList = res.rows
-          this.total = res.total
-        }
-      }).catch()
-    },
+    // toBeStoredList() {
+    //   let params = {
+    //     pageNum: this.pageNum,
+    //     pageSize: this.pageSize,
+    //     cabinetType: 3,
+    //     storeStatus: 0 // 0待存，1已存，2取出，3部分在存
+    //   }
+    //   toBeStoredList(params).then((res) => {
+    //     if (res.result) {
+    //       this.storeList = res.rows
+    //       this.total = res.total
+    //     }
+    //   }).catch()
+    // },
     effectsManagementFn(id) {
       this.listDialogVisible = true
       this.getProperty(id)
@@ -426,7 +604,8 @@ export default {
         cabinetType: 3,
         eventNo: this.suspectInfo.idCard,
         id: this.currentId,
-        name: this.suspectInfo.name
+        name: this.suspectInfo.name,
+        storePicture: this.suspectInfo.pictureUpload[0].url
       }
       updateSuspect(data).then((res) => {
         if (res.result) {
@@ -469,6 +648,14 @@ export default {
     },
     confirm() {
       this.listDialogVisible = false
+      this.getPersonalItemList()
+    },
+     handleSizeChange(val) {
+      this.pageSize = val
+      this.getPersonalItemList()
+    },
+    handleCurrentChange(val) {
+      this.pageNum = val
       this.getPersonalItemList()
     }
   }

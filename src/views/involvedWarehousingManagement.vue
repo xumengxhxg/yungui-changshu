@@ -218,7 +218,7 @@
                     width='250'>
                     <template slot-scope="scope">
                       <el-button type="text" @click.stop="achieveBarcode(scope.row.caseNo)">打印条形码</el-button>
-                      <el-button type="text" @click.stop="removeCheck(scope.row.id, 1)">全部移除登记</el-button>
+                      <el-button type="text" @click.stop="removeCheck(scope.row.inventoryId, 1)">全部移除登记</el-button>
                     </template>
                   </el-table-column>
                 </el-table>
