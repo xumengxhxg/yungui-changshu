@@ -539,6 +539,12 @@ export default {
                 this.tableData = []
                 this.selectDoorNo = ''
                 this.pictureUpload = []
+              } else {
+                this.$message({
+                  message: res.msg,
+                  type: 'warning'
+                })
+                done()
               }
             }).catch()
           } else {
