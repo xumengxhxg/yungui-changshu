@@ -43,7 +43,7 @@
           </el-table>
           <div class="mt20 clearfix">
             <div class="pull-left">图片上传：</div>
-            <div>
+            <div style="position: relative">
               <!-- <el-upload
                 class="pull-left ph20"
                 action="#"
