@@ -538,6 +538,7 @@ export default {
                 this.idCard = ''
                 this.tableData = []
                 this.selectDoorNo = ''
+                this.pictureUpload = []
               }
             }).catch()
           } else {
@@ -594,7 +595,8 @@ export default {
       this.suspectDialogVisible = true
       this.suspectInfo = {
         name: item.suspectName,
-        idCard: item.identityCard
+        idCard: item.identityCard,
+        pictureUpload: [{url: item.storePicture}]
       }
       this.currentId = item.id
     },

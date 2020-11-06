@@ -79,11 +79,23 @@
             align="center">
           </el-table-column>
           <el-table-column
+            label="物品编号"
+            width="100"
+            prop="itemNos"
+            align="center">
+          </el-table-column>
+          <el-table-column
+            label="物品名称"
+            width="100"
+            prop="itemNames"
+            align="center">
+          </el-table-column>
+          <!-- <el-table-column
             label="协办人"
             prop="cosponsor"
             width="170"
             align="center">
-          </el-table-column>
+          </el-table-column> -->
           <!-- <el-table-column
             label="查获中队"
             prop="discoverDept"

@@ -81,12 +81,12 @@
             width="100"
             align="center">
           </el-table-column>
-          <el-table-column
+          <!-- <el-table-column
             label="协办人"
             prop="cosponsor"
             width="100"
             align="center">
-          </el-table-column>
+          </el-table-column> -->
           <el-table-column
             label="状态"
             align="center">

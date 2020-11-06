@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { getCounterInfo, getStoreName } from '@/api/cabinet'
+import { getStoreName } from '@/api/cabinet'
 export default {
   name: 'selectCabinet',
   props: {
@@ -76,7 +76,6 @@ export default {
     }
   },
   created() {
-    this.getCounterInfo()
     this.getStoreName()
   },
   methods: {
@@ -103,37 +102,6 @@ export default {
             })
           } else {
             // item.surplusSpace = res.data.capacity // 未使用
-            item.usedSpace = 0 //已使用
-            item.inExistence = 0
-          }
-        })
-        this.cabinetNewList = this.cabinetList
-      }).catch()
-    },
-    // 获取柜面信息
-    getCounterInfo() {
-      let params = {
-        cabinetType: 1
-      }
-      getCounterInfo(params).then((res) => {
-        this.cabinetList.forEach((item, index) => {
-          this.sum = res.data.capacity
-          item.surplusSpace = res.data.capacity // 未使用
-          item.usedSpace = 0 //已使用
-          item.inExistence = 0
-          if (res.data.doorInfoList) {
-            res.data.doorInfoList.forEach((doorItem) => {
-              if (item.doorNo == doorItem.doorNo) {
-                item.surplusSpace = doorItem.surplusSpace
-                item.usedSpace = doorItem.usedSpace
-                item.inExistence = doorItem.inExistence
-              } else {
-                // item.surplusSpace = res.data.capacity // 未使用
-                // item.usedSpace = 0 //已使用
-              }
-            })
-          } else {
-            item.surplusSpace = res.data.capacity // 未使用
             item.usedSpace = 0 //已使用
             item.inExistence = 0
           }
