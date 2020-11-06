@@ -389,7 +389,11 @@ export default {
         cabinetType: 3,
         itemStatus: 0
       }
-      getPersonalItemList(data).then((res) => {
+      let params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
+      }
+      getPersonalItemList(data, params).then((res) => {
         if (res.result) {
           this.storelist = res.rows
           this.total = res.total
@@ -487,7 +491,7 @@ export default {
       this.selectCabinetDialogVisible = true
     },
     register() {
-      if (!this.suspect || !this.idCard || !this.tableData.length || !this.selectDoorNo) {
+      if (!this.suspect || !this.idCard || !this.tableData.length || !this.selectDoorNo || !this.pictureUpload.length) {
         this.$message({
           message: '请完善登记信息',
           type: 'warning'
