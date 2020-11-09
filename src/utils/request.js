@@ -50,8 +50,8 @@ service.axios.interceptors.response.use(res => {
   const code = res.data.code
   if(code===401) {
     localStorage.removeItem('token')
-    this.$message({type: 'warning', message: '登录过期，请重新登录'})
-    // window_warning('登录过期，请重新登录')
+    // this.$message({type: 'warning', message: '登录过期，请重新登录'})
+    window_warning('登录过期，请重新登录')
     window.location.reload()
     // return res.data
     // window_warning('登录过期，请重新登录').then(res=>{
