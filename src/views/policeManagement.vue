@@ -299,6 +299,7 @@ export default {
 
       setTimeout(()=>{
       },200)
+      this.init()
   },
   methods: {
     addface(){
@@ -391,6 +392,28 @@ export default {
               data = "send{getimgae,0,"+qulity+",1}";//send(命令码,颜色,质量,缓存区)  命令码:getimage  颜色:0-3 质量:0-100  缓冲区:1-2
             this.xmlHttp.send(data); 
           },
+      init() {
+        //创建异步对象
+        var xhr = new XMLHttpRequest()
+        //设置请求的类型及url
+        //post请求一定要添加请求头才行不然会报错
+        // xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xhr.open('post', 'http://127.0.0.1:8867/', true)
+        //发送请求
+        let data = "send{matchfp,请按压指纹,请按压指纹,0}"
+        xhr.send(data)
+        // xhr.onreadystatechange = function () {
+        //     // 这步为判断服务器是否正确响应
+        //   if (xhr.readyState == 4 && xhr.status == 200) {
+        //     if (JSON.parse(xhr.response).resultFlag == 0) {
+        //       th.$message({
+        //         type: 'success',
+        //         message: '连接成功'
+        //       })
+        //     }
+        //   } 
+        // }
+      },
       back_getimage(){	
         setTimeout(()=>{
           if(this.xmlHttp.status == 200 && this.xmlHttp.readyState == 4)
