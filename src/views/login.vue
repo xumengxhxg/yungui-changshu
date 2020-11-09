@@ -92,8 +92,18 @@ export default {
           //   localStorage.setItem('page', 'back')
           // }
         } else {
-          window_warning('账号或密码出错')
-          return false;
+          if (res.msg == 'user.password.not.match:') {
+            this.$message({
+              message: '账号或密码不正确',
+              type: 'warning'
+            })
+          } else {
+            this.$message({
+              message: 'error',
+              type: 'warning'
+            })
+          }
+          return false
         }
          
       }).catch((err) => {
