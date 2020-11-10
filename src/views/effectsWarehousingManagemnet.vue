@@ -238,7 +238,8 @@
       title="照片"
       :visible.sync="pictureDialogVisible"
       width="30%">
-      <img :src="picture" alt="" style="width: 100%">
+      <img v-if="picture" :src="picture" alt="" style="width: 100%">
+      <div v-else style="text-align: center">暂无照片</div>
     </el-dialog>
     <div v-if="selectCabinetDialogVisible">
       <select-cabinet :dialogVisible='selectCabinetDialogVisible' @update='updateCabinetDialogVisible' @selectCabinet='selectDoor'></select-cabinet>
