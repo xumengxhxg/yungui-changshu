@@ -21,8 +21,10 @@
             <div class="content" v-for="(item, index) in list" :key="index">
               <div>物品编号：{{item.itemNo}}</div>
               <div>物品名称：{{item.itemName}}</div>
-              <div>人员姓名：{{item.suspectName}}</div>
-              <div>查获时间：{{item.discoverTime ? item.discoverTime.slice(0, 10) : ''}}</div>
+              <!-- <div>人员姓名：{{item.suspectName}}</div> -->
+              <!-- <div>查获时间：{{item.discoverTime ? item.discoverTime.slice(0, 10) : ''}}</div> -->
+              <div>案件名称： {{item.caseName}}</div>
+              <div>主办人： {{item.sponsor}}</div>
               <div>存放人：{{item.storerName}}</div>
               <div>存放时间： {{item.storeTime ? item.storeTime.slice(0, 10) : ''}}</div>
               <div>
