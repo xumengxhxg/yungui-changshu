@@ -416,6 +416,7 @@ export default {
       },
       back_getimage(){	
         setTimeout(()=>{
+          console.log(this.xmlHttp.status,this.xmlHttp.readyState)
           if(this.xmlHttp.status == 200 && this.xmlHttp.readyState == 4)
         {
           var getstr =  this.xmlHttp.responseText;
@@ -528,7 +529,7 @@ export default {
         }
         else 
           this.$message.error('未知错误')
-        },1000)
+        },2000)
         // return false;		
         
       } ,
