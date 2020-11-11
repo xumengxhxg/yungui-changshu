@@ -29,7 +29,7 @@ export function getCaseList(data) {
 }
 export function getCaseList2(data) {
   return request({
-      url: '/cloudcabinet/inventoryInfo/getCaseList',
+      url: '/cloudcabinet/inventoryInfo/getCaseList?pageSize='+data.pageSize+'&pageNum='+data.pageNum,
       method: 'post',
       data: data
   })
@@ -173,7 +173,7 @@ export function getRecordList(params, data) {
 // 案件查询 查看详情
 export function queryFiles(data) {
   return request({
-      url: '/cloudcabinet/inventoryInfo/queryFiles',
+      url: '/cloudcabinet/inventoryInfo/queryFiles?pageSize='+data.pageSize+'&pageNum='+data.pageNum,
       method: 'post',
       data: data
   })

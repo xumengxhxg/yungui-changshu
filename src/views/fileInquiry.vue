@@ -172,6 +172,8 @@ export default {
         cabinetType: 1,
         caseName: this.form.caseName,
         caseNo: this.form.caseNo,
+        pageSize:this.pageSize,
+        pageNum:this.pageNum,
         // caseType: this.form.caseType,
         // doorNo: this.form.doorNo,
         // startTime: startTime,

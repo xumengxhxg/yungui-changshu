@@ -192,7 +192,9 @@ export default {
         caseName: this.form.caseName,
         // doorNo: this.form.doorNo,
         storeStatus: 1,
-        cabinetType: 1
+        cabinetType: 1,
+        pageNum:this.pageNum,
+        pageSize:this.pageSize,
       }
       getCaseList2(data).then((res) => {
         if (res.result) {
