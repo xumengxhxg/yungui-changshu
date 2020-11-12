@@ -529,7 +529,7 @@ export default {
         }
         else 
           this.$message.error('未知错误')
-        },2000)
+        },3000)
         // return false;		
         
       } ,
