@@ -210,7 +210,11 @@ export default {
         caseName: this.form.caseName,
         caseNo: this.form.caseNo,
       }
-      haveStoredList(data).then((res) => {
+      let params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
+      }
+      haveStoredList(data, params).then((res) => {
         if (res.result) {
           this.tableData = res.rows
           this.total = res.total

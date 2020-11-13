@@ -205,7 +205,11 @@ export default {
         caseNo: this.form.caseNo,
         itemStatus: 1
       }
-      haveStoredList(data).then((res) => {
+      let params = {
+        pageNum: this.pageNum,
+        pageSize: this.pageSize
+      }
+      haveStoredList(data, params).then((res) => {
         if (res.result) {
           this.tableData = res.rows
           this.total = res.total
@@ -248,7 +252,7 @@ export default {
       this.pageSize = val
       this.getAccidentList()
     },
-    handleCurrentChange() {
+    handleCurrentChange(val) {
       this.pageNum = val
       this.getAccidentList()
     }

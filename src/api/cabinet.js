@@ -11,11 +11,12 @@ export function getCounterInfo(params) {
 }
 
 // 事故搜索
-export function getAccidentList(data) {
+export function getAccidentList(data, params) {
   return request({
       url: '/cloudcabinet/accidentInfo/getAccidentList',
       method: 'post',
-      data: data
+      data: data,
+      params: params
   })
 }
 
@@ -242,11 +243,12 @@ export function removeSinglePropertyCheck(id) {
 }
 
 // /cloudcabinet/inventoryInfo/haveStoredList
-export function haveStoredList(data) {
+export function haveStoredList(data, params) {
   return request({
       url: '/cloudcabinet/inventoryInfo/haveStoredList',
       method: 'post',
-      data: data
+      data: data,
+      params: params
   })
 }
 
